@@ -1,0 +1,65 @@
+transactions - timeline de transacciones
+multifiltro
+next-back
+Game {
+    id: int
+    round: .postBlinds, .preflop, .flop, .turn, .river
+    current_round: round
+    number_of_plays: [Play]
+
+    func start() {
+        current_round = .preFlop
+    }
+
+}
+
+Play {
+    id: int
+    number_of_turns: [Turn]
+
+}
+
+
+··traansaction:
+Turn {
+
+    id: int
+    action: fold,call, raise
+    bet_value: integer
+    stack_value: integer
+    pem: decimal 0-1
+
+}
+
+acciones. tests
+computaciones: input-output estable. test
+datos:
+
+triangulacion: casos para negativo, 0, 1, +1
+
+unit tests
+given/when/then
+
+test_game_when_created_then_round_is_postBlinds {
+//1 given
+let game = Game()
+
+//2 when
+
+
+//3 then
+assertequals(game.current_round, .postBlind)
+
+}
+
+test_game_when_starts_then_round_is_preFlop {
+//1 given
+let game = Game()
+
+//2 when
+game.start()
+
+//3 then
+assertequals(game.state, .preFlop)
+
+}

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session and Games Table</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Estilos adicionales */
+        .custom-div {
+            width: 776px;
+            height: 597px;
+            background-color: black;
+            color: white;
+            margin-top: 100px;
+            margin-left: 100px;
+            position: relative;
+        }
+        .custom-div2 {
+            width: 776px;
+            height: 75;
+            background-color: black;
+            color: white;
+            margin-top: 0px;
+            margin-left: 100px;
+            position: relative;
+        }
+        .top-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .p2name {
+            position: absolute;
+            top: 75px;
+            left: 75px;
+        }
+        .p2pos {
+            position: absolute;
+            top: 85px;
+            left: 35px;
+        }
+        .p2sum {
+            position: absolute;
+            top: 85px;
+            left: 210px;
+        }
+        .p3name {
+            position: absolute;
+            top: 75px;
+            right: 75px;
+        }
+        .p3pos {
+            position: absolute;
+            top: 85px;
+            right: 30px;
+        }
+        .p3sum {
+            position: absolute;
+            top: 85px;
+            right: 230px;
+        }
+        
+        .p1name {
+            position: absolute;
+            bottom: 90px;
+            right: 350px;
+        }
+        .p1pos {
+            position: absolute;
+            bottom: 50px;
+            left: 350px;
+        }
+        .p1sum {
+            position: absolute;
+            bottom: 160px;
+            left: 350px;
+        }
+        .mainPot {
+            position: absolute;
+            bottom: 300px;
+            left: 350px;
+        }
+        .bottom-right {
+            position: absolute;
+            bottom: 10px; /* Ajusta la distancia desde la parte inferior */
+            right: 10px; /* Ajusta la distancia desde la derecha */
+        }
+        .table-responsive {
+            max-height: 500px; /* Ajusta esta altura según sea necesario */
+            overflow-y: auto;
+        }
+        .selected {
+            background-color: #d3d3d3; /* Color de fondo para la fila seleccionada */
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Columna izquierda con las tablas -->
+            <div class="col-md-6">
+                <div>
+                    <h1 align="left">Session Table</h1>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Session Code</th>
+                                    <th>Duration</th>
+                                    <th>Game Count</th>
+                                    <th>Start Date</th>
+                                    <th>Nickname</th>
+                                    <th>Tournament Code</th>
+                                    <th>Total Buyin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for session in sessions %}
+                                <tr>
+                                    <td>{{ session.sessioncode }}</td>
+                                    <td>{{ session.duration }}</td>
+                                    <td>{{ session.gamecount }}</td>
+                                    <td>{{ session.startdate }}</td>
+                                    <td>{{ session.nickname }}</td>
+                                    <td>{{ session.tournamentcode }}</td>
+                                    <td>{{ session.totalbuyin }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h1 align="left">Games Table</h1>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Game Code</th>
+                                    <!-- <th>Tournament Code</th>-->
+                                    <th>Small Blind</th>
+                                    <th>Big Blind</th>
+                                    <th>P2stack</th>
+                                    <th>P2name</th>
+                                    <th>P2dealer</th>
+                                    <th>P3stack</th>
+                                    <th>P3name</th>
+                                    <th>P3dealer</th>
+                                    <th>P1stack</th>
+                                    <th>P1name</th>
+                                    <th>P1dealer</th>
+                                    <th>Hand Dealt</th>
+                                    <th>P1mano</th>
+                                    <th>P2mano</th>
+                                    <th>P3mano</th>
+                                    <th>Flop</th>
+                                    <th>Turn</th>
+                                    <th>River</th>
+                                    <th>P1pos</th>
+                                    <th>P2pos</th>
+                                    <th>P3pos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for game in games %}
+                                <tr data-gamecode="{{ game.gamecode }}"
+                                    data-tournamentcode="{{ game.tournamentcode }}"
+                                    data-smallblind="{{ game.smallblind }}"
+                                    data-bigblind="{{ game.bigblind }}"
+                                    data-p2stack="{{ game.P2stack }}"
+                                    data-p2name="{{ game.P2name }}"
+                                    data-p2dealer="{{ game.P2dealer }}"
+                                    data-p3stack="{{ game.P3stack }}"
+                                    data-p3name="{{ game.P3name }}"
+                                    data-p3dealer="{{ game.P3dealer }}"
+                                    data-p1stack="{{ game.P1stack }}"
+                                    data-p1name="{{ game.P1name }}"
+                                    data-p1dealer="{{ game.P1dealer }}"
+                                    data-handdealt="{{ game.hand_dealt }}"
+                                    data-p1mano="{{ game.P1mano }}"
+                                    data-p2mano="{{ game.P2mano }}"
+                                    data-p3mano="{{ game.P3mano }}"
+                                    data-flop="{{ game.flop }}"
+                                    data-turn="{{ game.turn }}"
+                                    data-river="{{ game.river }}"
+                                    data-p1pos="{{ game.P1pos }}"
+                                    data-p2pos="{{ game.P2pos }}"
+                                    data-p3pos="{{ game.P3pos }}">
+                                    <td>{{ game.gamecode }}</td>
+                                    <!-- <td>{{ game.tournamentcode }}</td>-->
+                                    <td>{{ game.smallblind }}</td>
+                                    <td>{{ game.bigblind }}</td>
+                                    <td>{{ game.P2stack }}</td>
+                                    <td>{{ game.P2name }}</td>
+                                    <td>{{ game.P2dealer }}</td>
+                                    <td>{{ game.P3stack }}</td>
+                                    <td>{{ game.P3name }}</td>
+                                    <td>{{ game.P3dealer }}</td>
+                                    <td>{{ game.P1stack }}</td>
+                                    <td>{{ game.P1name }}</td>
+                                    <td>{{ game.P1dealer }}</td>
+                                    <td>{{ game.hand_dealt }}</td>
+                                    <td>{{ game.P1mano }}</td>
+                                    <td>{{ game.P2mano }}</td>
+                                    <td>{{ game.P3mano }}</td>
+                                    <td>{{ game.flop }}</td>
+                                    <td>{{ game.turn }}</td>
+                                    <td>{{ game.river }}</td>
+                                    <td>{{ game.P1pos }}</td>
+                                    <td>{{ game.P2pos }}</td>
+                                    <td>{{ game.P3pos }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h1 align="left">Actions Table</h1>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Game Code</th>
+                                    <th>Round No</th>
+                                    <th>Action Type</th>
+                                    <th>Player</th>
+                                    <th>Sum</th>
+                                    <th>Action No</th>
+                                    <th>Accion</th>
+                                    <th>Ronda</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for action in actions %}
+                                <tr>
+                                    <td>{{ action.gamecode }}</td>
+                                    <td>{{ action.round_no }}</td>
+                                    <td>{{ action.action_type }}</td>
+                                    <td>{{ action.player }}</td>
+                                    <td>{{ action.sum }}</td>
+                                    <td>{{ action.action_no }}</td>
+                                    <td>{{ action.accion }}</td>
+                                    <td>{{ action.ronda }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna derecha con el div negro -->
+            <div class="col-md-6">
+                <div class="custom-div">
+                    
+                </div>
+                <div class="custom-div2">
+                    <div class="bottom-right">
+                        <button class="btn btn-primary mr-2" id="retrocesoBtn">retroceso</button>
+                        <button class="btn btn-primary mr-2" id="avanceBtn">avance</button>
+                        <br>
+                        <button class="btn btn-success mr-2">Flop</button>
+                        <button class="btn btn-success mr-2">Turn</button>
+                        <button class="btn btn-success">River</button>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+<script>
+    // Valor inicial global para round_no
+    var initialRoundNo = 2;
+    var currentRoundNo = initialRoundNo; // Inicialización global de currentRoundNo
+    var selectedGamecode = ""; // Variable para almacenar el gamecode seleccionado
+    var actions = []; // Variable para almacenar las acciones
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // Agregar el evento de clic a cada fila de cada tabla
+        document.querySelectorAll('table tbody tr').forEach(row => {
+            row.addEventListener('click', function() {
+                // Eliminar la clase 'selected' de todas las filas
+                document.querySelectorAll('table tbody tr').forEach(r => r.classList.remove('selected'));
+                // Agregar la clase 'selected' a la fila seleccionada
+                this.classList.add('selected');
+            });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Obtener todas las filas de la tabla de juegos
+        var gameRows = document.querySelectorAll(".table-bordered tbody tr");
+
+        // Simulación de datos de acciones
+        actions = [
+            {% for action in actions %}
+                {
+                    "gamecode": "{{ action.gamecode }}",
+                    "round_no": "{{ action.round_no }}",
+                    "action_type": "{{ action.action_type }}",
+                    "player": "{{ action.player }}",
+                    "sum": "{{ action.sum }}",
+                    "action_no": "{{ action.action_no }}",
+                    "accion": "{{ action.accion }}",
+                    "ronda": "{{ action.ronda }}"
+                }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        // Agregar evento de clic a cada fila
+        gameRows.forEach(function(row) {
+            row.addEventListener("click", function() {
+                // Restablecer currentRoundNo al valor inicial
+                currentRoundNo = initialRoundNo;
+
+                // Obtener los datos del juego de la fila clicada
+                var gamecode = row.dataset.gamecode;
+                selectedGamecode = gamecode; // Almacenar el gamecode seleccionado
+                var tournamentcode = row.dataset.tournamentcode;
+                var smallblind = row.dataset.smallblind;
+                var bigblind = row.dataset.bigblind;
+                var p2stack = row.dataset.p2stack;
+                var p2name = row.dataset.p2name;
+                var p2dealer = row.dataset.p2dealer;
+                var p3stack = row.dataset.p3stack;
+                var p3name = row.dataset.p3name;
+                var p3dealer = row.dataset.p3dealer;
+                var p1stack = row.dataset.p1stack;
+                var p1name = row.dataset.p1name;
+                var p1dealer = row.dataset.p1dealer;
+                var handdealt = row.dataset.handdealt;
+                var p1mano = row.dataset.p1mano;
+                var p2mano = row.dataset.p2mano;
+                var p3mano = row.dataset.p3mano;
+                var flop = row.dataset.flop;
+                var turn = row.dataset.turn;
+                var river = row.dataset.river;
+                var p1pos = row.dataset.p1pos;
+                var p2pos = row.dataset.p2pos;
+                var p3pos = row.dataset.p3pos;
+                
+
+                // Filtrar acciones por gamecode y round_no = 0
+                var filteredActions = actions.filter(function(action) {
+                    return action.gamecode === gamecode && action.round_no === '0';
+                });
+
+                // Obtener sum por jugador
+                var p1Sum = filteredActions.filter(action => action.player === p1name).map(action => action.sum);
+                var p2Sum = filteredActions.filter(action => action.player === p2name).map(action => action.sum);
+                var p3Sum = filteredActions.filter(action => action.player === p3name).map(action => action.sum);
+
+                // Restar p2sum de p2stack
+                var p2resto = p2stack - p2Sum;
+                var p3resto = p3stack - p3Sum;
+                var p1resto = p1stack - p1Sum;
+
+                // Calcula mainPot
+                var mainPot = p1Sum - p2Sum + p3Sum;
+
+                // Construir HTML para mostrar detalles del juego y acciones
+                var actionDetails = document.querySelector(".custom-div");
+                actionDetails.innerHTML = `
+                    <div class="top-left"><strong>Tournament Code:</strong> ${tournamentcode}</div>
+                    <div class="p2name" style="border: 1px solid white; padding: 5px; text-align: center; width: 125px;"> <strong>${p2name}<br><div class="p2resto" id="p2resto">${p2resto}</div></div>
+                    <div class="p2pos" style="text-align: center;"><strong>${p2pos}</div>
+                    ${p2Sum.length > 0 ? `<div class="p2sum" id="p2sum" style="text-align: center;"><strong>${p2Sum.join(', ')} BB</strong></div>` : '<div class="p2sum" id="p2sum" style="text-align: center;"></div>'}
+
+                    <div class="p3name" style="border: 1px solid white; padding: 5px; text-align: center; width: 125px;"><strong>${p3name}<br><div class="p3resto" id="p3resto">${p3resto}</div></div>
+                    <div class="p3pos" style="text-align: center;"><strong>${p3pos}</div>
+                    ${p3Sum.length > 0 ? `<div class="p3sum" id="p3sum" style="text-align: center;"><strong>${p3Sum.join(', ')} BB</strong></div>` : '<div class="p3sum" id="p3sum" style="text-align: center;"></div>'}
+
+                    <div class="p1name" style="border: 1px solid white; padding: 5px; text-align: center; width: 125px;"><strong>${p1name}<br><div class="p1resto" id="p1resto">${p1resto}</div></div>
+                    <div class="p1pos" style="text-align: center;"><strong>${p1pos}</div>
+                    ${p1Sum.length > 0 ? `<div class="p1sum" id="p1sum" style="text-align: center;"><strong>${p1Sum.join(', ')} BB</strong></div>` : '<div class="p1sum" id="p1sum" style="text-align: center;"></div>'}
+
+                    <div class="mainPot" id="mainPot" style="text-align: center;"><strong>${mainPot}</div>
+    
+                `;
+
+                // Reinicializar los botones con nuevos event listeners
+                var avanceBtn = document.getElementById('avanceBtn');
+                var retrocesoBtn = document.getElementById('retrocesoBtn');
+
+                avanceBtn.addEventListener('click', function() {
+                    currentRoundNo++; // Incrementar currentRoundNo
+                    console.log("Current Round No incrementado a:", currentRoundNo); // Verificar el incremento
+                    handleAdvanceButtonClick();
+                });
+
+                retrocesoBtn.addEventListener('click', handleRetrocesoButtonClick);
+            });
+        });
+    });
+
+    function findRoundOneAction(gamecode, currentRoundNo) {
+        console.log("Buscando acción para round:", currentRoundNo); // Verificación adicional
+        return actions.find(action =>
+            action.gamecode === gamecode &&
+            action.action_no === currentRoundNo.toString()
+        );
+    }
+
+    function handleAdvanceButtonClick() {
+        console.log("Current Round No en handleAdvanceButtonClick:", currentRoundNo); // Verificar el valor en la función
+        var roundOneAction = findRoundOneAction(selectedGamecode, currentRoundNo);
+        if (roundOneAction) {
+            // Actualizar detalles con la acción encontrada
+            var actionDetails = document.querySelector(".custom-div");
+            actionDetails.innerHTML += `
+                <br>Acción: ${roundOneAction.accion}, Jugador: ${roundOneAction.player}, Suma: ${roundOneAction.sum}
+            `;
+
+            if (roundOneAction.accion === 'fold') {
+                var playerSumDiv;
+                if (roundOneAction.player === p1name) {
+                    playerSumDiv = document.getElementById('p1sum');
+                } else if (roundOneAction.player === p2name) {
+                    playerSumDiv = document.getElementById('p2sum');
+                } else if (roundOneAction.player === p3name) {
+                    playerSumDiv = document.getElementById('p3sum');
+                }
+
+                if (playerSumDiv) {
+                    playerSumDiv.innerHTML = 'fold';
+                    playerSumDiv.style.color = 'red';
+                }
+            } else if (roundOneAction.accion === 'call' || roundOneAction.accion === 'raise') {
+                var playerSumDiv;
+                var playerrestoDiv;
+
+                if (roundOneAction.player === p1name) {
+                    playerSumDiv = document.getElementById('p1sum');
+                    playerrestoDiv = document.getElementById('p1resto');
+                } else if (roundOneAction.player === p2name) {
+                    playerSumDiv = document.getElementById('p2sum');
+                    playerrestoDiv = document.getElementById('p2resto');
+                } else if (roundOneAction.player === p3name) {
+                    playerSumDiv = document.getElementById('p3sum');
+                    playerrestoDiv = document.getElementById('p3resto');
+                }
+
+                if (playerSumDiv) {
+                    playerSumDiv.innerHTML += ', ' + roundOneAction.sum + ' BB';
+                }
+
+                if (playerrestoDiv) {
+                    var newResto = playerrestoDiv.innerHTML - roundOneAction.sum;
+                    playerrestoDiv.innerHTML = newResto;
+                }
+            }
+        }
+    }
+
+    function handleRetrocesoButtonClick() {
+        console.log("Current Round No en handleRetrocesoButtonClick:", currentRoundNo); // Verificar el valor en la función
+        if (currentRoundNo > 0) {
+            currentRoundNo--; // Decrementar currentRoundNo
+            console.log("Current Round No decrementado a:", currentRoundNo); // Verificar el decremento
+            handleAdvanceButtonClick(); // Llamar a la misma función que avance para mostrar la acción previa
+        }
+    }
+</script>
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+                

@@ -1,0 +1,12 @@
+#VALORES MEDIOS REG
+
+btn_or =
+bt_fold_3bet =
+
+#Muy bajo: 65 - Bajo: 70 - Alto: 85 - Muy alto: 90
+btn_cbet_flop = 75
+
+btn_fold_raise_after_cbet_flop =
+btn_cbet_turn =
+btn_fold_raise_after_cbet_flop =
+btn_Cbet_river =

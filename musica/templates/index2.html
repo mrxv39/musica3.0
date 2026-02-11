@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session and Games Table</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Estilos adicionales */
+        .custom-div {
+            width: 776px;
+            height: 597px;
+            background-color: black;
+            color: white;
+            margin-top: 100px;
+            margin-left: 100px;
+            position: relative;
+            z-index: 1; /* Asegura que este div esté por debajo de custom-div2 */
+            
+        }
+        .custom-div2 {
+            width: 776px;
+            height: 75;
+            background-color: black;
+            color: white;
+            margin-top: 0px;
+            margin-left: 100px;
+            position: relative;
+        }
+        .top-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .p2name {
+            position: absolute;
+            top: 75px;
+            left: 75px;
+            z-index: 10; /* Asegura que este div esté por debajo de custom-div2 */
+        }
+        .p2pos {
+            position: absolute;
+            top: 85px;
+            left: 35px;
+            z-index: 10; /* Asegura que este div esté por debajo de custom-div2 */
+        }
+        .p2sum {
+            position: absolute;
+            top: 85px;
+            left: 210px;
+            z-index: 10; /* Asegura que este div esté por debajo de custom-div2 */
+        }
+        .p3name {
+            position: absolute;
+            top: 75px;
+            right: 75px;
+        }
+        .p3pos {
+            position: absolute;
+            top: 85px;
+            right: 30px;
+        }
+        .p3sum {
+            position: absolute;
+            top: 85px;
+            right: 230px;
+        }
+        
+        .p1name {
+            position: absolute;
+            bottom: 90px;
+            right: 350px;
+        }
+        .p1pos {
+            position: absolute;
+            bottom: 50px;
+            left: 350px;
+        }
+        .p1sum {
+            position: absolute;
+            bottom: 160px;
+            left: 350px;
+        }
+        .mainPot {
+            position: absolute;
+            bottom: 300px;
+            left: 350px;
+        }
+        .bottom-right {
+            position: absolute;
+            bottom: 10px; /* Ajusta la distancia desde la parte inferior */
+            right: 10px; /* Ajusta la distancia desde la derecha */
+        }
+        .table-responsive {
+            max-height: 500px; /* Ajusta esta altura según sea necesario */
+            overflow-y: auto;
+        }
+        .selected {
+            background-color: #d3d3d3; /* Color de fondo para la fila seleccionada */
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Columna izquierda con las tablas -->
+            <div class="col-md-6">
+                <div>
+                    <h1 align="left">Session Table</h1>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Sessionssss Code</th>
+                                    <th>Duration</th>
+                                    <th>Game Count</th>
+                                    <th>Start Date</th>
+                                    <th>Nickname</th>
+                                    <th>Tournament Code</th>
+                                    <th>Total Buyin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for session in sessions %}
+                                <tr>
+                                    <td>{{ session.sessioncode }}</td>
+                                    <td>{{ session.duration }}</td>
+                                    <td>{{ session.gamecount }}</td>
+                                    <td>{{ session.startdate }}</td>
+                                    <td>{{ session.nickname }}</td>
+                                    <td>{{ session.tournamentcode }}</td>
+                                    <td>{{ session.totalbuyin }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h1 align="left">Games Table</h1>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Game Code</th>
+                                    <!-- <th>Tournament Code</th>-->
+                                    <th>Small Blind</th>
+                                    <th>Big Blind</th>
+                                    <th>P2stack</th>
+                                    <th>P2name</th>
+                                    <th>P2dealer</th>
+                                    <th>P3stack</th>
+                                    <th>P3name</th>
+                                    <th>P3dealer</th>
+                                    <th>P1stack</th>
+                                    <th>P1name</th>
+                                    <th>P1dealer</th>
+                                    <th>Hand Dealt</th>
+                                    <th>P1mano</th>
+                                    <th>P2mano</th>
+                                    <th>P3mano</th>
+                                    <th>Flop</th>
+                                    <th>Turn</th>
+                                    <th>River</th>
+                                    <th>P1pos</th>
+                                    <th>P2pos</th>
+                                    <th>P3pos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for game in games %}
+                                <tr data-gamecode="{{ game.gamecode }}"
+                                    data-tournamentcode="{{ game.tournamentcode }}"
+                                    data-smallblind="{{ game.smallblind }}"
+                                    data-bigblind="{{ game.bigblind }}"
+                                    data-p2stack="{{ game.P2stack }}"
+                                    data-p2name="{{ game.P2name }}"
+                                    data-p2dealer="{{ game.P2dealer }}"
+                                    data-p3stack="{{ game.P3stack }}"
+                                    data-p3name="{{ game.P3name }}"
+                                    data-p3dealer="{{ game.P3dealer }}"
+                                    data-p1stack="{{ game.P1stack }}"
+                                    data-p1name="{{ game.P1name }}"
+                                    data-p1dealer="{{ game.P1dealer }}"
+                                    data-handdealt="{{ game.hand_dealt }}"
+                                    data-p1mano="{{ game.P1mano }}"
+                                    data-p2mano="{{ game.P2mano }}"
+                                    data-p3mano="{{ game.P3mano }}"
+                                    data-flop="{{ game.flop }}"
+                                    data-turn="{{ game.turn }}"
+                                    data-river="{{ game.river }}"
+                                    data-p1pos="{{ game.P1pos }}"
+                                    data-p2pos="{{ game.P2pos }}"
+                                    data-p3pos="{{ game.P3pos }}">
+                                    <td>{{ game.gamecode }}</td>
+                                    <!-- <td>{{ game.tournamentcode }}</td>-->
+                                    <td>{{ game.smallblind }}</td>
+                                    <td>{{ game.bigblind }}</td>
+                                    <td>{{ game.P2stack }}</td>
+                                    <td>{{ game.P2name }}</td>
+                                    <td>{{ game.P2dealer }}</td>
+                                    <td>{{ game.P3stack }}</td>
+                                    <td>{{ game.P3name }}</td>
+                                    <td>{{ game.P3dealer }}</td>
+                                    <td>{{ game.P1stack }}</td>
+                                    <td>{{ game.P1name }}</td>
+                                    <td>{{ game.P1dealer }}</td>
+                                    <td>{{ game.hand_dealt }}</td>
+                                    <td>{{ game.P1mano }}</td>
+                                    <td>{{ game.P2mano }}</td>
+                                    <td>{{ game.P3mano }}</td>
+                                    <td>{{ game.flop }}</td>
+                                    <td>{{ game.turn }}</td>
+                                    <td>{{ game.river }}</td>
+                                    <td>{{ game.P1pos }}</td>
+                                    <td>{{ game.P2pos }}</td>
+                                    <td>{{ game.P3pos }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h1 align="left">Actions Table</h1>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Game Code</th>
+                                    <th>Round No</th>
+                                    <th>Action Type</th>
+                                    <th>Player</th>
+                                    <th>Sum</th>
+                                    <th>Action No</th>
+                                    <th>Accion</th>
+                                    <th>Ronda</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for action in actions %}
+                                <tr>
+                                    <td>{{ action.gamecode }}</td>
+                                    <td>{{ action.round_no }}</td>
+                                    <td>{{ action.action_type }}</td>
+                                    <td>{{ action.player }}</td>
+                                    <td>{{ action.sum }}</td>
+                                    <td>{{ action.action_no }}</td>
+                                    <td>{{ action.accion }}</td>
+                                    <td>{{ action.ronda }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna derecha con el div negro -->
+            <div class="col-md-6">
+                <div class="custom-div">
+                    <div class="p1name" id="p1name" style="border: 1px solid white; padding: 5px; text-align: center; width: 125px;"> <strong>${p1name}<br><div class="p1resto" id="p1resto">${p1stack}</div></div>
+                    <div class="p1pos" id="p1pos" style="text-align: center;"><strong>${p1pos}</div>
+                    <div class="p1sum" id="p1sum" style="text-align: center;"><strong>${p1sum}</div>
+                   
+
+                    <div class="p2name" id="p2name" style="border: 1px solid white; padding: 5px; text-align: center; width: 125px;"> <strong>${p2name}<br><div class="p2resto" id="p2resto">${p2stack}</div></div>
+                    <div class="p2pos" id="p2pos" style="text-align: center;"><strong>${p2pos}</div>
+                    <div class="p2sum" id="p2sum" style="text-align: center;"><strong>${p2sum}</div>
+
+
+                    <div class="p3name" id="p3name" style="border: 1px solid white; padding: 5px; text-align: center; width: 135px;"> <strong>${p3name}<br><div class="p3resto" id="p3resto">${p3stack}</div></div>
+                    <div class="p3pos" id="p3pos" style="text-align: center;"><strong>${p3pos}</div>
+                    <div class="p3sum" id="p3sum" style="text-align: center;"><strong>${p3sum}</div>
+                   
+
+                    
+                </div>
+                <div class="custom-div2">
+                    <div class="bottom-right">
+                        <button class="btn btn-primary mr-2" id="retrocesoBtn">retroceso</button>
+                        <button class="btn btn-primary mr-2" id="avanceBtn">avance</button>
+                        <br>
+                        <button class="btn btn-success mr-2">Flop</button>
+                        <button class="btn btn-success mr-2">Turn</button>
+                        <button class="btn btn-success">River</button>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+<script>
+// Función para aplicar el filtro de tag
+function applyTagFilter() {
+    var tag = document.getElementById('tagInput').value.trim().toUpperCase();
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/filter_games', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            updateGamesTable(response);
+        } else {
+            console.error('Error al obtener los datos de los juegos. Estado de la respuesta:', xhr.status);
+        }
+    };
+    xhr.send('tag=' + tag);
+}
+
+// Función para limpiar el filtro de tag
+function clearTagFilter() {
+    document.getElementById('tagInput').value = '';
+    document.getElementById('gamesTable').classList.add('hidden');
+    document.getElementById('noResultsMessage').classList.add('hidden');
+}
+
+// Función para actualizar la tabla de juegos
+function updateGamesTable(response) {
+    var gamesTableBody = document.getElementById('gamesTableBody');
+
+    if (gamesTableBody) {  // Verifica si el elemento existe
+        var html = '';
+        if (response.games.length > 0) {
+            response.games.forEach(function(game) {
+                html += '<tr><td>' + game + '</td></tr>';
+            });
+        } else {
+            html = '<tr><td colspan="2">No hay manos</td></tr>';
+        }
+        gamesTableBody.innerHTML = html;
+        document.getElementById('gamesTable').classList.remove('hidden');  // Mostrar la tabla
+        document.getElementById('noResultsMessage').classList.add('hidden');  // Ocultar el mensaje de no hay manos
+    } else {
+        console.error('Element with ID gamesTableBody not found.');
+    }
+}
+
+
+
+
+
+
+function showActionData(gamecode, gameP1name, gameP2name) {
+    const actionsTableRows = document.querySelectorAll('table#actionsTable tbody tr');
+    let p2sum = '';
+    let p1sum = '';
+    let p3sum = '';
+
+    actionsTableRows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const action = {
+            gamecode: cells[0].innerText,
+            roundNo: cells[1].innerText,
+            actionType: cells[2].innerText,
+            player: cells[3].innerText,
+            sum: cells[4].innerText,
+            actionNo: cells[5].innerText,
+            accion: cells[6].innerText,
+            ronda: cells[7].innerText
+        };
+
+        console.log('Action:', action); // Verifica que se estén capturando los datos correctamente
+
+        if (action.gamecode === gamecode && action.actionNo === '1') {
+            if (action.player === gameP2name) {
+                p2sum = action.sum;
+            }
+            if (action.player === gameP1name) {
+                p1sum = action.sum;
+            }
+        }
+    });
+
+    // Actualizar el contenido del div p2sum
+    const p2sumDiv = document.getElementById('p2sum');
+    if (p2sumDiv) {
+        p2sumDiv.innerText = p2sum;  // Asegúrate de asignar el texto, no el elemento HTML
+    }
+
+    // Actualizar el contenido del div p1sum
+    const p1sumDiv = document.getElementById('p1sum');
+    if (p1sumDiv) {
+        p1sumDiv.innerText = p1sum;  // Asegúrate de asignar el texto, no el elemento HTML
+    }
+}
+
+
+// Llamar a setupTableSelection después de que el DOM se haya cargado
+document.addEventListener('DOMContentLoaded', function() {
+    setupTableSelection();
+});
+
+    </script>
+</body>
+</html>
+
+
+
+                

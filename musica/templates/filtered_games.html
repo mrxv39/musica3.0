@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtered Games</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.4/nouislider.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+        /* Estilos adicionales */
+        .custom-div {
+            width: 776px;
+            height: 597px;
+            background-color: black;
+            color: white;
+            margin-top: 100px;
+            margin-left: 100px;
+            position: relative;
+        }
+        .custom-div2 {
+            width: 776px;
+            height: 75;
+            background-color: black;
+            color: white;
+            margin-top: 0px;
+            margin-left: 100px;
+            position: relative;
+        }
+        .top-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .p2name {
+            position: absolute;
+            top: 75px;
+            left: 75px;
+        }
+        .p2pos {
+            position: absolute;
+            top: 85px;
+            left: 35px;
+        }
+        .p2sum {
+            position: absolute;
+            top: 85px;
+            left: 210px;
+        }
+        .p2Move {
+            position: absolute;
+            top: 105px;
+            left: 210px;
+        }
+        .p3name {
+            position: absolute;
+            top: 75px;
+            right: 75px;
+        }
+        .p3pos {
+            position: absolute;
+            top: 85px;
+            right: 30px;
+        }
+        .p3sum {
+            position: absolute;
+            top: 85px;
+            right: 230px;
+        }
+        .p3Move {
+            position: absolute;
+            top: 105px;
+            right: 230px;
+        }
+        
+        .p1name {
+            position: absolute;
+            bottom: 90px;
+            right: 350px;
+        }
+        .p1pos {
+            position: absolute;
+            bottom: 50px;
+            left: 350px;
+        }
+        .p1sum {
+            position: absolute;
+            bottom: 170px;
+            left: 350px;
+        }
+        .p1Move {
+            position: absolute;
+            bottom: 150px;
+            left: 350px;
+        }
+        .mainPot {
+            position: absolute;
+            bottom: 375px;
+            left: 350px;
+        }
+        .flopDiv {
+            position: absolute;
+            bottom: 300px;
+            left: 300px;
+            display: none;
+        }
+        .turnDiv {
+            position: absolute;
+            bottom: 300px;
+            left: 380px;
+            display: none;
+        }
+        .riverDiv {
+            position: absolute;
+            bottom: 300px;
+            left: 405px;
+            display: none;
+        }
+        .bottom-right {
+            position: absolute;
+            bottom: 10px; /* Ajusta la distancia desde la parte inferior */
+            right: 10px; /* Ajusta la distancia desde la derecha */
+        }
+        .table-responsive {
+            max-height: 500px; /* Ajusta esta altura según sea necesario */
+            overflow-y: auto;
+        }
+        .selected {
+            background-color: #d3d3d3; /* Color de fondo para la fila seleccionada */
+        }
+        .btn-active {
+            background-color: #007bff; /* Color azul */
+            color: #fff; /* Texto blanco */
+            border-color: #007bff; /* Borde azul */
+        }
+        #sumRangeMin {
+        max-width: 200px; /* Ajusta el tamaño máximo según tus necesidades */
+        }
+        #sumRangeMax {
+        max-width: 200px; /* Ajusta el tamaño máximo según tus necesidades */
+        }
+        #percentageRangeMin {
+        max-width: 200px; /* Ajusta el tamaño máximo según tus necesidades */
+        }
+        #percentageRangeMax {
+        max-width: 200px; /* Ajusta el tamaño máximo según tus necesidades */
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row mt-3 ml-1">
+            <div class="col-md-4">
+                P1 pos
+                <form id="tagForm">
+                <form id="tagForm">
+    <input type="hidden" id="posInput" name="pos" value="">
+    <input type="hidden" id="rondaInput" name="ronda" value="">
+    <input type="hidden" id="actionInput" name="action" value="">
+    <input type="hidden" id="sumInput" name="sum" value="0">
+
+    <!-- Botones para P1pos -->
+    <div class="btn-group mr-2" role="group" id="posGroup">
+        <button type="button" class="btn btn-primary btn-tag" onclick="selectTag('BTN', 'pos', event)">BTN</button>
+        <button type="button" class="btn btn-primary btn-tag" onclick="selectTag('SB', 'pos', event)">SB</button>
+        <button type="button" class="btn btn-primary btn-tag" onclick="selectTag('BB', 'pos', event)">BB</button>
+    </div>
+    
+    <!-- Botones para Ronda -->
+    <div class="btn-group mr-2" role="group" id="roundGroup">
+        <button type="button" class="btn btn-primary btn-tag" onclick="selectTag('PREFLOP', 'ronda', event)">PREFLOP</button>
+        <button type="button" class="btn btn-primary btn-tag" onclick="selectTag('FLOP', 'ronda', event)">FLOP</button>
+        <button type="button" class="btn btn-primary btn-tag" onclick="selectTag('TURN', 'ronda', event)">TURN</button>
+        <button type="button" class="btn btn-primary btn-tag" onclick="selectTag('RIVER', 'ronda', event)">RIVER</button>
+    </div>
+    
+    <!-- Botones para Acción -->
+    <div class="btn-group" role="group" id="actionGroup">
+        <button type="button" class="btn btn-primary btn-tag" onclick="selectTag('FOLD', 'action', event)">FOLD</button>
+        <button type="button" class="btn btn-primary btn-tag" onclick="selectTag('CALL', 'action', event)">CALL</button>
+        <button type="button" class="btn btn-primary btn-tag" onclick="selectTag('RAISE', 'action', event)">RAISE</button>
+    </div>
+
+<div class="row">
+    <!-- Input para Sum Range -->
+    <div class="form-group mt-3">
+    <label for="sumRangeMin">Sum Range:</label>
+    <input type="range" class="form-control-range" id="sumRangeMin" name="sumRangeMin" min="0" max="25" value="0" oninput="updateSumRange()">
+    <input type="range" class="form-control-range" id="sumRangeMax" name="sumRangeMax" min="0" max="25" value="25" oninput="updateSumRange()">
+    <span id="sumRangeValue">0 - 25</span>
+    <input type="hidden" id="sumRangeInput" name="sumRange" value="0-25">
+</div>
+
+<div class="form-group mt-3">
+    <label for="percentageRange">Percentage Range:</label>
+    <input type="range" class="form-control-range" id="percentageRangeMin" name="percentageRangeMin" min="0" max="200" value="0" oninput="updatePercentageRange()">
+    <input type="range" class="form-control-range" id="percentageRangeMax" name="percentageRangeMax" min="0" max="200" value="200" oninput="updatePercentageRange()">
+    <span id="percentageRangeValue">0% - 200%</span>
+    <input type="hidden" id="percentageRangeInput" name="percentageRange" value="0-200">
+</div>
+</div>
+</form>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <h3>Manos filtradas</h3>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="gamesTable">
+                        <thead>
+                            <tr>
+                                <th>Game Code</th>
+                                <th>Tournament Code</th>
+                                <th>Small Blind</th>
+                                <th>Big Blind</th>
+                                <th>P2 Stack</th>
+                                <th>P2 Name</th>
+                                <th>P2 Dealer</th>
+                                <th>P3 Stack</th>
+                                <th>P3 Name</th>
+                                <th>P3 Dealer</th>
+                                <th>P1 Stack</th>
+                                <th>P1 Name</th>
+                                <th>P1 Dealer</th>
+                                <th>P2 Position</th>
+                                <th>P3 Position</th>
+                                <th>P1 Position</th>
+                                <th>Hand Dealt</th>
+                                <th>P1 MANO</th>
+                                <th>P2 MANO</th>
+                                <th>P3 MANO</th>
+                                <th>Flop</th>
+                                <th>Turn</th>
+                                <th>River</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gamesTableBody">
+                            <!-- Las filas de juegos se añadirán dinámicamente aquí -->
+                        </tbody>
+                    </table>
+                </div>
+                <h3>Postflop manos</h3>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="actionsTable">
+                        <thead>
+                            <tr>
+                                <th>Game Code</th>
+                                <th>Round No</th>
+                                <th>Player</th>
+                                <th>Action</th>
+                                <th>Sum</th>
+                                <th>Action No</th>
+                                <th>Ronda</th>
+                                <th>IA Move</th>
+                            </tr>
+                        </thead>
+                        <tbody id="actionsTableBody">
+                            <!-- Las filas de acciones se añadirán dinámicamente aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="custom-div">
+                    <!-- Contenido de custom-div -->
+                </div>
+                <div class="custom-div2">
+                    <!-- Contenido de custom-div2 -->
+                    <div class="bottom-right">
+                        <button class="btn btn-primary mr-2" id="retrocesoBtn">retroceso</button>
+                        <button class="btn btn-primary mr-2" id="avanceBtn">avance</button>
+                        <br>
+                        <button class="btn btn-success mr-2">Flop</button>
+                        <button class="btn btn-success mr-2">Turn</button>
+                        <button class="btn btn-success">River</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    var initialRoundNo = 2;
+    var currentRoundNo = initialRoundNo; // Inicialización global de currentRoundNo
+    var selectedGamecode = ""; // Variable para almacenar el gamecode seleccionado
+    var actions = []; // Variable para almacenar las acciones
+
+    // Variables globales para nombres de jugadores
+    var p1name, p2name, p3name, p1Move, p2Move, p3Move, flop, turn, river;
+
+    // Almacenar el valor de la ronda anterior
+    var previousRound = 'preflop';
+
+    function resetVariables() {
+        initialRoundNo = 2;
+        currentRoundNo = initialRoundNo; // Inicialización global de currentRoundNo
+        selectedGamecode = ""; // Variable para almacenar el gamecode seleccionado
+        actions = []; // Variable para almacenar las acciones
+
+        // Variables globales para nombres de jugadores
+        p1name = "";
+        p2name = "";
+        p3name = "";
+        p1Move = "";
+        p2Move = "";
+        p3Move = "";
+        flop = "";
+        turn = "";
+        river = "";
+
+        // Almacenar el valor de la ronda anterior
+        previousRound = 'preflop';
+        console.log("Variables globales reseteadas");
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Evento de clic para el botón de aplicar filtro por etiqueta
+        document.getElementById('applyFilterBtn').addEventListener('click', applyTagFilter);
+
+        // Evento de clic para el botón de limpiar filtro por etiqueta
+        document.getElementById('clearFilterBtn').addEventListener('click', clearTagFilter);
+
+        // Agregar el evento de clic a cada fila de cada tabla
+        document.querySelectorAll('#gamesTable tbody tr').forEach(row => {
+            row.addEventListener('click', function() {
+
+                // Resetear variables
+                resetVariables();
+                // Limpiar la clase 'selected' de todas las filas antes de añadirla a la seleccionada
+                document.querySelectorAll('#gamesTable tbody tr').forEach(r => r.classList.remove('selected'));
+                // Agregar la clase 'selected' a la fila seleccionada
+                this.classList.add('selected');
+
+                // Guardar el valor de la ronda anterior
+                previousRound = currentRoundNo === 2 ? 'preflop' : currentRoundNo === 3 ? 'flop' : currentRoundNo === 4 ? 'turn' : 'river';
+
+
+              
+                // Llamar a la función para mostrar los valores en el custom-div
+                showValuesInCustomDiv(this, 'games');
+            });
+        });
+
+     
+
+        // Agregar el evento de clic a cada fila de la tabla de acciones
+        document.querySelectorAll('#actionsTable tbody tr').forEach(row => {
+            row.addEventListener('click', function() {
+                // Limpiar la clase 'selected' de todas las filas antes de añadirla a la seleccionada
+                document.querySelectorAll('#actionsTable tbody tr').forEach(r => r.classList.remove('selected'));
+                // Agregar la clase 'selected' a la fila seleccionada
+                this.classList.add('selected');
+
+                // Guardar el valor de la ronda anterior
+                previousRound = currentRoundNo === 2 ? 'preflop' : currentRoundNo === 3 ? 'flop' : currentRoundNo === 4 ? 'turn' : 'river';
+
+                // Llamar a la función para mostrar los valores en el custom-div
+                showValuesInCustomDiv(this, 'actions');
+            });
+        });
+
+
+
+    });
+let selectedTags = { pos: '', ronda: '', action: '', sum: '' };
+
+
+
+function selectTag(tag, category, event) {
+    selectedTags[category] = tag;
+
+    document.querySelectorAll(`#${category}Group .btn-tag`).forEach(button => {
+        button.classList.remove('active');
+    });
+
+    event.target.classList.add('active');
+    document.getElementById(`${category}Input`).value = tag;
+
+    console.log(`Tag seleccionado: ${tag}, Categoría: ${category}`);
+    console.log(`selectedTags: `, selectedTags);
+
+    applyTagFilter();
+}
+
+function updateSumRange() {
+    const sumRangeMin = document.getElementById('sumRangeMin');
+    const sumRangeMax = document.getElementById('sumRangeMax');
+    const sumRangeValue = document.getElementById('sumRangeValue');
+    const sumRangeInput = document.getElementById('sumRangeInput');
+
+    let minValue = parseInt(sumRangeMin.value);
+    let maxValue = parseInt(sumRangeMax.value);
+
+    if (minValue > maxValue) {
+        const temp = minValue;
+        minValue = maxValue;
+        maxValue = temp;
+    }
+
+    sumRangeValue.innerText = `${minValue} - ${maxValue}`;
+    sumRangeInput.value = `${minValue}-${maxValue}`;
+}
+
+function updatePercentageRange() {
+    const percentageRangeMin = document.getElementById('percentageRangeMin');
+    const percentageRangeMax = document.getElementById('percentageRangeMax');
+    const percentageRangeValue = document.getElementById('percentageRangeValue');
+    const percentageRangeInput = document.getElementById('percentageRangeInput');
+
+    let minValue = parseInt(percentageRangeMin.value);
+    let maxValue = parseInt(percentageRangeMax.value);
+
+    if (minValue > maxValue) {
+        const temp = minValue;
+        minValue = maxValue;
+        maxValue = temp;
+    }
+
+    percentageRangeValue.innerText = `${minValue}% - ${maxValue}%`;
+    percentageRangeInput.value = `${minValue}-${maxValue}`;
+
+    // Debugging: Mostrar en consola los valores actualizados
+    console.log(`Percentage Range: ${percentageRangeInput.value}`);
+}
+
+function applyTagFilter() {
+    const { pos, ronda, action } = selectedTags;
+    const sumRange = document.getElementById('sumRangeInput').value.split('-');
+    const sumMin = parseInt(sumRange[0]);
+    const sumMax = parseInt(sumRange[1]);
+    const percentageRange = document.getElementById('percentageRangeInput').value.split('-');
+    const percentageRangeMin = parseInt(percentageRange[0]);
+    const percentageRangeMax = parseInt(percentageRange[1]);
+    const payload = { 
+        pos, 
+        ronda, 
+        action,
+        sumMin,
+        sumMax,
+        percentageRangeMin,
+        percentageRangeMax
+    };
+
+    // Verificar si la ronda es PREFLOP antes de añadir sumMin y sumMax al payload
+    if (ronda !== 'PREFLOP') {
+        delete payload.sumMin;
+        delete payload.sumMax;
+    }
+
+    fetch('/filter_games', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.games) {
+            updateGamesTable(data.games);
+        } else {
+            alert(data.message || 'Error al obtener los datos de los juegos');
+        }
+        if (data.actions) {
+            updateActionsTable(data.actions);
+        } else {
+            alert(data.message || 'Error al obtener los datos de las acciones');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+        function updateGamesTable(games) {
+            const tableBody = document.getElementById('gamesTableBody');
+            tableBody.innerHTML = '';  // Limpiar la tabla antes de añadir los nuevos datos
+            games.forEach(game => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${game.gamecode}</td>
+                    <td>${game.tournamentcode}</td>
+                    <td>${game.smallblind}</td>
+                    <td>${game.bigblind}</td>
+                    <td>${game.P2stack}</td>
+                    <td>${game.P2name}</td>
+                    <td>${game.P2dealer}</td>
+                    <td>${game.P3stack}</td>
+                    <td>${game.P3name}</td>
+                    <td>${game.P3dealer}</td>
+                    <td>${game.P1stack}</td>
+                    <td>${game.P1name}</td>
+                    <td>${game.P1dealer}</td>
+                    <td>${game.P2pos}</td>
+                    <td>${game.P3pos}</td>
+                    <td>${game.P1pos}</td>
+                    <td>${game.hand_dealt}</td>
+                    <td>${game.P1mano}</td>
+                    <td>${game.P2mano}</td>
+                    <td>${game.P3mano}</td>
+                    <td>${game.flop}</td>
+                    <td>${game.turn}</td>
+                    <td>${game.river}</td>
+                `;
+                tableBody.appendChild(row);
+
+                // Agregar evento de clic a la fila recién creada
+                row.addEventListener('click', function() {
+                    // Limpiar la clase 'selected' de todas las filas antes de añadirla a la seleccionada
+                    document.querySelectorAll('#gamesTable tbody tr').forEach(r => r.classList.remove('selected'));
+                    // Agregar la clase 'selected' a la fila seleccionada
+                    this.classList.add('selected');
+
+                    // Guardar el valor de la ronda anterior
+                    previousRound = currentRoundNo === 2 ? 'preflop' : currentRoundNo === 3 ? 'flop' : currentRoundNo === 4 ? 'turn' : 'river';
+
+                    // Llamar a la función para mostrar los valores en el custom-div
+                    showValuesInCustomDiv(this, 'games');
+                });
+            });
+        }
+
+        function updateActionsTable(actions) {
+            const tableBody = document.getElementById('actionsTableBody');
+            tableBody.innerHTML = '';  // Limpiar la tabla antes de añadir los nuevos datos
+            actions.forEach(action => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${action.gamecode}</td>
+                    <td>${action.round_no}</td>
+                    <td>${action.player}</td>
+                    <td>${action.accion}</td>
+                    <td>${action.sum}</td>
+                    <td>${action.action_no}</td>
+                    <td>${action.ronda}</td>
+                    <td>${action.ia_move}</td>
+                `;
+                tableBody.appendChild(row);
+
+                // Agregar evento de clic a la fila recién creada
+                row.addEventListener('click', function() {
+                    // Limpiar la clase 'selected' de todas las filas antes de añadirla a la seleccionada
+                    document.querySelectorAll('#actionsTable tbody tr').forEach(r => r.classList.remove('selected'));
+                    // Agregar la clase 'selected' a la fila seleccionada
+                    this.classList.add('selected');
+
+                    // Guardar el valor de la ronda anterior
+                    previousRound = currentRoundNo === 2 ? 'preflop' : currentRoundNo === 3 ? 'flop' : currentRoundNo === 4 ? 'turn' : 'river';
+
+                    // Llamar a la función para mostrar los valores en el custom-div
+                    showValuesInCustomDiv(this, 'actions');
+                });
+            });
+        }
+
+    function clearTagFilter() {
+        document.getElementById('tagInput').value = '';
+        document.getElementById('gamesTableBody').innerHTML = '';
+        document.getElementById('actionsTableBody').innerHTML = '';
+    }
+
+
+    function showValuesInCustomDiv(row, tableType) {
+        resetVariables();
+        if (tableType === 'games') {
+            // Obtener los datos de la fila clicada
+            const gamecode = row.cells[0].innerText;
+            const tournamentcode = row.cells[1].innerText;
+            const smallblind = row.cells[2].innerText;
+            const bigblind = row.cells[3].innerText;
+            const p2stack = parseFloat(row.cells[4].innerText);
+            const p2name = row.cells[5].innerText;
+            const p2dealer = row.cells[6].innerText;
+            const p3stack = parseFloat(row.cells[7].innerText);
+            const p3name = row.cells[8].innerText;
+            const p3dealer = row.cells[9].innerText;
+            const p1stack = parseFloat(row.cells[10].innerText);
+            const p1name = row.cells[11].innerText;
+            const p1dealer = row.cells[12].innerText;
+            const p2pos = row.cells[13].innerText;
+            const p3pos = row.cells[14].innerText;
+            const p1pos = row.cells[15].innerText;
+            const hand_dealt = row.cells[16].innerText;
+            const p1mano = row.cells[17].innerText;
+            const p2mano = row.cells[18].innerText;
+            const p3mano = row.cells[19].innerText;
+            const flop = row.cells[20].innerText;
+            const turn = row.cells[21].innerText;
+            const river = row.cells[22].innerText;
+
+            console.log("Game code:", gamecode);
+
+            // Filtrar acciones por gamecode y round_no = 0
+            const actionsTableBody = document.getElementById('actionsTableBody');
+            const filteredActions = Array.from(actionsTableBody.rows).filter(actionRow => {
+                return actionRow.cells[0].innerText === gamecode && actionRow.cells[1].innerText === '0';
+            });
+
+            console.log("Filtered actions:", filteredActions);
+
+            if (filteredActions.length === 0) {
+                console.warn("No actions found for gamecode:", gamecode, "and round_no = '0'");
+            }
+
+            // Obtener sum por jugador
+            const getSumByPlayer = (playerName) => {
+                return filteredActions
+                    .filter(actionRow => actionRow.cells[2].innerText === playerName)
+                    .map(actionRow => parseFloat(actionRow.cells[4].innerText))
+                    .reduce((acc, sum) => acc + sum, 0);
+            };
+
+            const p1Sum = getSumByPlayer(p1name);
+            const p2Sum = getSumByPlayer(p2name);
+            const p3Sum = getSumByPlayer(p3name);
+
+            console.log("P1 Sum:", p1Sum);
+            console.log("P2 Sum:", p2Sum);
+            console.log("P3 Sum:", p3Sum);
+
+            // Restar p2sum de p2stack
+            const p2resto = p2stack - p2Sum;
+            const p3resto = p3stack - p3Sum;
+            const p1resto = p1stack - p1Sum;
+
+            console.log("P2 Resto:", p2resto);
+            console.log("P3 Resto:", p3resto);
+            console.log("P1 Resto:", p1resto);
+
+            // Calcular mainPot
+            const mainPot = (p1Sum + p2Sum + p3Sum);
+
+            console.log("Main Pot:", mainPot);
+
+            // Construir HTML para mostrar detalles del juego y acciones
+            const actionDetails = document.querySelector(".custom-div");
+            if (!actionDetails) {
+                console.error("Element .custom-div not found");
+                return;
+            }
+            
+            actionDetails.innerHTML = `
+                <div class="top-left"><strong>Tournament Code:</strong> ${gamecode}</div>
+                <div class="p2name" id="p2name" style="border: 1px solid white; padding: 5px; text-align: center; width: 125px;">
+                    <strong>${p2name}</strong>
+                    <div class="p2resto" id="p2resto">${p2resto}</div>
+                </div>
+                <div class="p2pos" style="text-align: center;"><strong>${p2pos}</strong></div>
+                <div class="p2sum" id="p2sum" style="text-align: center;"><strong>${p2Sum}</strong></div>
+                <div class="p2Move" id="p2Move">${p2Move}</div>
+
+                <div class="p3name" id="p3name" style="border: 1px solid white; padding: 5px; text-align: center; width: 125px;">
+                    <strong>${p3name}</strong>
+                    <div class="p3resto" id="p3resto">${p3resto}</div>
+                </div>
+                <div class="p3pos" style="text-align: center;"><strong>${p3pos}</strong></div>
+                <div class="p3sum" id="p3sum" style="text-align: center;"><strong>${p3Sum}</strong></div>
+                <div class="p3Move" id="p3Move">${p3Move}</div>
+
+                <div class="p1name" id="p1name" style="border: 1px solid white; padding: 5px; text-align: center; width: 125px;">
+                    <strong>${p1name}</strong>
+                    <div class="p1resto" id="p1resto">${p1resto}</div>
+                </div>
+                <div class="p1pos" style="text-align: center;"><strong>${p1pos}</strong></div>
+                <div class="p1sum" id="p1sum" style="text-align: center;"><strong>${p1Sum}</strong></div>
+                <div class="p1Move" id="p1Move">${p1Move}</div>
+
+                <div class="mainPot" id="mainPot" style="text-align: center;"><strong>Pot: ${mainPot}</strong></div>
+                <div class="flopDiv" id="flopDiv"><strong> ${flop}</strong></div>
+                <div class="turnDiv" id="turnDiv"><strong> ${turn}</strong></div>
+                <div class="riverDiv" id="riverDiv"><strong> ${river}</strong></div>
+            `;
+
+            // Obtener los botones
+            const avanceBtn = document.getElementById('avanceBtn');
+            const retrocesoBtn = document.getElementById('retrocesoBtn');
+
+            // Definir las funciones manejadoras para ser reutilizadas
+            function handleAdvanceClick() {
+                currentRoundNo++; // Incrementar currentRoundNo
+                console.log("Current Round No incrementado a:", currentRoundNo); // Verificar el incremento
+                handleAdvanceButtonClick(gamecode);
+            }
+
+            function handleRetrocesoClick() {
+                currentRoundNo--; // Decrementar currentRoundNo
+                console.log("Current Round No decrementado a:", currentRoundNo); // Verificar el decremento
+                handleRetrocesoButtonClick(gamecode);
+            }
+
+            // Remover manejadores de eventos existentes si están definidos
+            if (avanceBtn._clickHandler) {
+                avanceBtn.removeEventListener('click', avanceBtn._clickHandler);
+            }
+            if (retrocesoBtn._clickHandler) {
+                retrocesoBtn.removeEventListener('click', retrocesoBtn._clickHandler);
+            }
+
+            // Asignar nuevos manejadores de eventos
+            avanceBtn._clickHandler = handleAdvanceClick;
+            retrocesoBtn._clickHandler = handleRetrocesoClick;
+
+            // Agregar eventos a los botones
+            avanceBtn.addEventListener('click', handleAdvanceClick);
+            retrocesoBtn.addEventListener('click', handleRetrocesoClick);
+
+        } else if (tableType === 'actions') {
+            // Lógica para manejar la tabla de acciones si es necesario
+            // ...
+        }
+    }
+
+
+    function findRoundOneAction(gamecode, currentRoundNo) {
+        console.log("Buscando acción para ronda:", currentRoundNo); // Verificación adicional
+        const actions = getTableData();
+        console.log("Actions:", actions); // Verificar el contenido de actions
+        
+        const filteredActions = actions.filter(action =>
+            action.gamecode === gamecode.trim() && 
+            parseInt(action.action_no) === currentRoundNo
+        );
+
+        console.log("Acciones filtradas:", filteredActions); // Verificar las acciones filtradas
+
+        if (filteredActions.length > 0) {
+            return filteredActions[0]; // Devuelve la primera acción encontrada
+        } else {
+            console.warn("No se encontró ninguna acción para gamecode:", gamecode, "y currentRoundNo:", currentRoundNo);
+            return null; // Devuelve null si no se encontró ninguna acción
+            }
+    }
+
+    function getTableData() {
+            const tableBody = document.getElementById('actionsTableBody');
+            const rows = tableBody.getElementsByTagName('tr');
+            const actions = [];
+
+            for (let row of rows) {
+                const cells = row.getElementsByTagName('td');
+                const action = {
+                    gamecode: cells[0].innerText,
+                    round_no: cells[1].innerText,
+                    player: cells[2].innerText,
+                    accion: cells[3].innerText,
+                    sum: cells[4].innerText,
+                    action_no: cells[5].innerText,
+                    ronda: cells[6].innerText,
+                    ia_move: cells[7].innerText,
+                };
+                actions.push(action);
+            }
+
+            return actions;
+        }
+
+
+    function handleAdvanceButtonClick(selectedGamecode) {
+    console.log("Current Round No en handleAdvanceButtonClick:", currentRoundNo); // Verificar el valor en la función
+    var roundOneAction = findRoundOneAction(selectedGamecode, currentRoundNo);
+    console.log("Acción encontrada:", roundOneAction); // Verificar la acción encontrada
+
+    if (roundOneAction) {
+        // Actualizar detalles con la acción encontrada
+        var actionDetails = document.querySelector(".custom-div");
+        actionDetails.innerHTML += `
+            <br>Acción: ${roundOneAction.accion}, Jugador: ${roundOneAction.player}, Suma: ${roundOneAction.sum}, Ronda: ${roundOneAction.ronda}
+        `;
+
+        var p1nameElement = document.getElementById('p1name');
+        var p1name = p1nameElement.querySelector('strong').innerText;
+
+        var p2nameElement = document.getElementById('p2name');
+        var p2name = p2nameElement.querySelector('strong').innerText;
+
+        var p3nameElement = document.getElementById('p3name');
+        var p3name = p3nameElement.querySelector('strong').innerText;
+
+        // Verificar los nombres de los jugadores
+        console.log("p1name:", p1name, "p2name:", p2name, "p3name:", p3name);
+
+        // Limpiar los divs de los jugadores si la ronda ha cambiado
+        if (roundOneAction.ronda !== previousRound) {
+            function clearPlayerDivs() {
+                document.getElementById('p1sum').innerHTML = '';
+                document.getElementById('p1Move').innerHTML = '';
+                document.getElementById('p2sum').innerHTML = '';
+                document.getElementById('p2Move').innerHTML = '';
+                document.getElementById('p3sum').innerHTML = '';
+                document.getElementById('p3Move').innerHTML = '';
+            }
+
+            // Limpiar los divs al cambiar la ronda
+            clearPlayerDivs();
+
+            // Actualizar el valor de la ronda anterior
+            previousRound = roundOneAction.ronda;
+        }
+
+        var flopDiv = document.getElementById('flopDiv'); 
+        var turnDiv = document.getElementById('turnDiv'); 
+        var riverDiv = document.getElementById('riverDiv');
+
+        // Mostrar/ocultar divs según la ronda
+        if (roundOneAction.ronda === 'PREFLOP') {
+            flopDiv.style.display = 'none'; 
+            turnDiv.style.display = 'none'; 
+            riverDiv.style.display = 'none'; 
+            console.log("Estamos en el preflop:");
+        } else if (roundOneAction.ronda === 'FLOP') {
+            flopDiv.style.display = 'block'; 
+            turnDiv.style.display = 'none'; 
+            riverDiv.style.display = 'none';
+            console.log("Estamos en el flop:");
+        } else if (roundOneAction.ronda === 'TURN') {
+            flopDiv.style.display = 'block';
+            turnDiv.style.display = 'block'; 
+            riverDiv.style.display = 'none';
+            console.log("Estamos en el turn:");
+        } else if (roundOneAction.ronda === 'RIVER') {
+            flopDiv.style.display = 'block';
+            turnDiv.style.display = 'block';
+            riverDiv.style.display = 'block';
+            console.log("Estamos en el river:");
+        }
+
+        var playerSumDiv, playerrestoDiv, playerMoveDiv;
+
+        // Identificar el jugador correspondiente
+        if (roundOneAction.player === p1name) {
+            playerSumDiv = document.getElementById('p1sum');
+            playerrestoDiv = document.getElementById('p1resto');
+            playerMoveDiv = document.getElementById('p1Move');
+        } else if (roundOneAction.player === p2name) {
+            playerSumDiv = document.getElementById('p2sum');
+            playerrestoDiv = document.getElementById('p2resto');
+            playerMoveDiv = document.getElementById('p2Move');
+        } else if (roundOneAction.player === p3name) {
+            playerSumDiv = document.getElementById('p3sum');
+            playerrestoDiv = document.getElementById('p3resto');
+            playerMoveDiv = document.getElementById('p3Move');
+        }
+
+        // Actualizar el contenido según la acción
+        if (roundOneAction.accion === 'FOLD') {
+            if (playerSumDiv) {
+                playerSumDiv.style.color = 'red';
+                playerSumDiv.innerHTML = roundOneAction.sum;
+            }
+
+            if (playerMoveDiv) {
+                playerMoveDiv.style.color = 'red';
+                playerMoveDiv.innerHTML = roundOneAction.accion;
+            }
+        } else if (roundOneAction.accion === 'CALL' || roundOneAction.accion === 'RAISE' || roundOneAction.accion === 'CHECK' || roundOneAction.accion === 'BET') {
+            var playerSum = parseFloat(playerSumDiv.innerText) || 0;
+            var newSum = parseFloat(roundOneAction.sum);
+
+            if (playerSumDiv) {
+                playerSumDiv.innerText = (playerSum + newSum) + ' BB'; // Actualizar suma con el nuevo valor
+            }
+
+            if (playerrestoDiv) {
+                var newResto = parseFloat(playerrestoDiv.innerText) - newSum; // Realizar la resta
+                playerrestoDiv.innerText = newResto; // Actualizar el resto con el nuevo valor
+            }
+
+            if (playerMoveDiv) {
+                playerMoveDiv.innerHTML = roundOneAction.accion;
+            }
+        }
+
+        // Actualizar el valor del main pot
+        var mainPotDiv = document.getElementById('mainPot');
+        if (mainPotDiv) {
+            var currentMainPot = parseFloat(mainPotDiv.innerText.replace('Pot: ', '')) || 0;
+            var updatedMainPot = currentMainPot + parseFloat(roundOneAction.sum);
+            mainPotDiv.innerText = `Pot: ${updatedMainPot}`;
+        }
+    }
+}
+
+
+
+
+
+</script>
+
+</body>
+</html>

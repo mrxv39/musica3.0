@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Segoe UI;
+            background-color: #f5f5f5; /* Gris muy claro */
+        }
+        .container {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+        .header {
+            flex-basis: 100px;
+            border: 1px solid black;
+            padding: 7px;
+            text-align: center;
+            cursor: pointer;
+            background-color: azure;
+        }
+        .row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cell {
+    flex-basis: calc(100% / 6);
+    box-sizing: border-box;
+    border: 1px solid black;
+    padding: 2px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 13px; /* Tamaño de fuente deseado */
+}
+        .active {
+            background-color: #555;
+            color: white;
+        }
+        #image {
+            height: 500px;
+            width: 570px;
+        }
+        #image2 {
+            height: 500px;
+            width: 500px;
+        }
+
+        #image img,
+        #image2 img {
+    max-width: 490px;
+    min-height: 450px;
+   
+}
+#options4 {
+        flex-basis: 100%; /* Hace que el div ocupe todo el ancho disponible */
+        /*min-height: 100px;  Establece una altura mínima para asegurar que se expanda */
+    }
+    #options1 {
+        flex-basis: 100%; /* Hace que el div ocupe todo el ancho disponible */
+        /*min-height: 100px;  Establece una altura mínima para asegurar que se expanda */
+    }
+    #options2 {
+        flex-basis: 100%; /* Hace que el div ocupe todo el ancho disponible */
+        /*min-height: 100px;  Establece una altura mínima para asegurar que se expanda */
+    }
+    #options3 {
+        flex-basis: 100%; /* Hace que el div ocupe todo el ancho disponible */
+        /*min-height: 100px;  Establece una altura mínima para asegurar que se expanda */
+    }
+    #options5 {
+        flex-basis: 100%; /* Hace que el div ocupe todo el ancho disponible */
+        /*min-height: 100px;  Establece una altura mínima para asegurar que se expanda */
+    }
+    #options6 {
+        flex-basis: 100%; /* Hace que el div ocupe todo el ancho disponible */
+        /*min-height: 100px;  Establece una altura mínima para asegurar que se expanda */
+    }
+
+    </style>
+    <title>IIIMU</title>
+</head>
+<body onload="loadImage('1.png','')">
+    <div class="container">
+        <div class="header active" onclick="toggleOptions('options1')">BTN</div>
+        <div class="header" onclick="toggleOptions('options2')">SBvsBTN</div>
+        <div class="header" onclick="toggleOptions('options3')">BBvsBTN</div>
+        <div class="header" onclick="toggleOptions('options4')">SBvsBB</div>
+        <div class="header" onclick="toggleOptions('options5')">BBvsSB</div>
+        <div class="header" onclick="toggleOptions('options6')">BvsSB l</div>
+    </div>
+    <div class="container">
+        <div class="row" id="options1">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="86.png" data-legend="">25+</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="87.png" data-legend="">21</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="88.png" data-legend="">17</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="89.png" data-legend="">15</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="90.png" data-legend="">13</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="91.png" data-legend="">11</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="92.png" data-legend="">10</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="93.png" data-legend="">9</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="94.png" data-legend="">NASH PUSH</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="10.png" data-legend="">CALL SQZ</div>
+        </div>
+        <div class="row" id="options2" style="display: none;">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="95.png" data-legend="">25+</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="96.png" data-legend="">21</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="97.png" data-legend="">17-15</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="98.png" data-legend="">13</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="99.png" data-legend="">11</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="100.png" data-legend="">vs BTN OS</div>
+      
+
+
+        </div>
+        <div class="row" id="options3" style="display: none;">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="101.png" data-legend="">25+</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="102.png" data-legend="">21</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="103.png" data-legend="">17</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="104.png" data-legend="">15</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="105.png" data-legend="">13</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="106.png" data-legend="">11</div>
+            <div class="cell" onclick="" data-img="" data-legend="">OS</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="107.png" data-legend="">vs BTN</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="108.png" data-legend="">vs BTN + SB</div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="" data-img="" data-legend="">SQZ</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="109.png" data-legend="">25</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="110.png" data-legend="">21</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="111.png" data-legend="">17</div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="" data-img="" data-legend="">SQZ SB F</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="112.png" data-legend="">25</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="113.png" data-legend="">20</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="114.png" data-legend="">15</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="115.png" data-legend="">15 DEBIL</div>
+        </div>
+        <div class="row" id="options4" style="display: none;">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="120.png" data-legend="">25+</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="121.png" data-legend="">21</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="122.png" data-legend="">17</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="123.png" data-legend="">15</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="124.png" data-legend="">13</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="125.png" data-legend="">11</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="126.png" data-legend="">10</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="127.png" data-legend="">9</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="128.png" data-legend="">NASH PUSH</div>
+        </div>
+        <div class="row" id="options5" style="display: none;">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="130.png" data-legend="">25+ 3X</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="131.png" data-legend="">21 x3</div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="132.png" data-legend="">25 x2.5</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="133.png" data-legend="">19 x2.5</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="134.png" data-legend="">17 x2.5</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="135.png" data-legend="">15 x2.5</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="136.png" data-legend="">13 x2.5</div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="137.png" data-legend="">25+</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="138.png" data-legend="">21</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="139.png" data-legend="">17</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="140.png" data-legend="">15</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="141.png" data-legend="">13</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="142.png" data-legend="">11</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="143.png" data-legend="">10</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="144.png" data-legend="">vs OS</div>
+        </div>
+        <div class="row" id="options6" style="display: none;">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="150.png" data-legend="">25+</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="151.png" data-legend="">21</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="152.png" data-legend="">17</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="153.png" data-legend="">15</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="154.png" data-legend="">13</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="155.png" data-legend="">11</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="156.png" data-legend="">10</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="157.png" data-legend="">9</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="158.png" data-legend="">vs OS</div>
+        </div>
+
+        
+    </div>
+    <div>
+        <div id="image"></div>
+        <div id="image2"></div>
+    </div>
+
+    <script>
+        function toggleOptions(elementId) {
+            var options = document.querySelectorAll(".row");
+            for (var i = 0; i < options.length; i++) {
+                options[i].style.display = "none";
+            }
+
+            var selectedOptions = document.getElementById(elementId);
+            if (selectedOptions) {
+                selectedOptions.style.display = "flex";
+
+                var headers = document.querySelectorAll(".header");
+                for (var j = 0; j < headers.length; j++) {
+                    headers[j].classList.remove("active");
+                }
+                var selectedHeader = document.querySelector(".header[onclick=\"toggleOptions('" + elementId + "')\"]");
+                if (selectedHeader) {
+                    selectedHeader.classList.add("active");
+
+                    var cells = selectedOptions.querySelectorAll(".cell");
+                    for (var k = 0; k < cells.length; k++) {
+                        cells[k].classList.remove("active");
+                    }
+                    var firstCell = selectedOptions.querySelector(".cell");
+                    if (firstCell) {
+                        firstCell.classList.add("active");
+
+                        var img = firstCell.getAttribute("data-img");
+                        var legend = firstCell.getAttribute("data-legend");
+                        loadImage(img, legend);
+                    }
+                }
+            }
+        }
+
+        function toggleClicked(element) {
+            var cells = element.parentNode.querySelectorAll(".cell");
+            for (var k = 0; k < cells.length; k++) {
+                cells[k].classList.remove("active");
+            }
+            element.classList.add("active");
+
+            var img = element.getAttribute("data-img");
+            var legend = element.getAttribute("data-legend");
+
+            loadImage(img, legend);
+        }
+
+        function loadImage(img, legend) {
+            var image = document.getElementById("image");
+            var image2 = document.getElementById("image2");
+            if (img) {
+                image.innerHTML = "<img src='" + img + "'/>";
+                image2.innerHTML = "<img src='" + legend + "'/>";
+            } else {
+                image.innerHTML = "";
+                image2.innerHTML = "";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+# backups
+_backup_scaffold_*/
+**/_backup_scaffold_*/
+
+# python venv
+.venv/
+**/.venv/
+
+# python caches
+__pycache__/
+*.pyc
+
+# local logs / outputs
+*.log
+logs/
+*.txt
+
+# sqlite/db
+*.db
+
+# zip bundles
+*.zip
