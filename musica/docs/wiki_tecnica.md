@@ -1,5 +1,93 @@
-# Stabilization (OCR → verifiers)
 
-- Verifier functions (e.g., verificar_stackefectivo, verificar_stack) are now hardened to accept None, int, and float values, preventing .replace crashes on non-string input.
-- The condiciones_salida_preflop function now receives p1bet_base as an explicit parameter, avoiding NameError issues in the preflop loop.
-- No changes were made to ROI or detection logic; only stability improvements.
+# MUSICA 3.0 — Arquitectura Técnica (Stable)
+
+## Estado Actual
+
+La arquitectura está completamente modularizada y estable:
+
+- Entrypoint limpio (musica1.py)
+- Orquestador (runner.py)
+- Lógica legacy encapsulada (legacy_worker.py)
+- Estado runtime aislado (state.py)
+
+---
+
+## Estructura del Proyecto
+
+musica/
+│
+├── musica1.py                → Entry point
+│
+├── musica/
+│   ├── runner.py             → Loop principal
+│   ├── legacy_worker.py      → Lógica original encapsulada
+│   ├── config.py             → Parseo de argumentos CLI
+│   ├── state.py              → Estado runtime
+│   └── logging_utils.py
+
+---
+
+## Flujo de Ejecución
+
+1. musica1.py
+   - Parseo de argumentos
+   - Llama a run_worker(config)
+
+2. runner.py
+   - Inicializa RuntimeState
+   - Ejecuta loop controlado
+   - Llama a legacy_worker.ejecutar_busqueda_concurrente()
+
+3. legacy_worker.py
+   - Contiene toda la lógica original (detección, OCR, scripts AHK)
+
+---
+
+## Normalización OCR de Stacks
+
+El OCR puede omitir puntos decimales en stacks, por ejemplo:
+
+- 245 → 24.5
+
+La normalización se aplica únicamente a:
+
+- p2stack
+- p3stack
+- stackefect
+
+No se modificaron:
+
+- ROIs
+- Lógica OCR
+- Orden de detección
+
+El sistema es ahora estable y los valores impresos son consistentes.
+
+---
+
+## Filosofía del Refactor
+
+- No modificar ROIs
+- No modificar lógica OCR
+- No modificar thresholds
+- Solo separar estructura
+- Import safety y testabilidad
+- Sin efectos colaterales al importar
+
+---
+
+## Estado Runtime
+
+Actualmente el sistema:
+
+- Detecta TIME correctamente
+- Detecta NOBOARD correctamente
+- Detecta DEALER correctamente
+- Detecta STACKEFECT correctamente
+- Ejecuta OCR correctamente
+- Reconoce cartas correctamente
+
+Pendiente:
+
+- Ajustes de variables globales legacy que dependían del while externo
+- Corrección de scope interno en ejecutar_busqueda_concurrente()
