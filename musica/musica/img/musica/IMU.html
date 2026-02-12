@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Segoe UI;
+            background-color: #f5f5f5; /* Gris muy claro */
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+        .header {
+            flex-basis: 100px;
+            border: 1px solid black;
+            padding: 7px;
+            text-align: center;
+            cursor: pointer;
+            background-color: azure;
+        }
+        .row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cell {
+    flex-basis: calc(100% / 6);
+    box-sizing: border-box;
+    border: 1px solid black;
+    padding: 3px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 15px; /* Tamaño de fuente deseado */
+}
+        .active {
+            background-color: #555;
+            color: white;
+        }
+        #image {
+            height: 500px;
+            width: 500px;
+        }
+        #image2 {
+            height: 500px;
+            width: 500px;
+        }
+
+        #image img,
+        #image2 img {
+    max-width: 475px;
+    min-height: 450px
+   
+}
+#options1 {
+        flex-basis: 100%; /* Hace que el div ocupe todo el ancho disponible */
+        /*min-height: 100px;  Establece una altura mínima para asegurar que se expanda */
+    }
+    #options3 {
+        flex-basis: 100%; /* Hace que el div ocupe todo el ancho disponible */
+        /*min-height: 100px;  Establece una altura mínima para asegurar que se expanda */
+    }
+    #options2 {
+        flex-basis: 100%; /* Hace que el div ocupe todo el ancho disponible */
+        /*min-height: 100px;  Establece una altura mínima para asegurar que se expanda */
+    }
+
+    </style>
+    <title>IMU</title>
+</head>
+<body onload="loadImage('1.png','')">
+    <div class="container">
+        <div class="header active" onclick="toggleOptions('options1')">SB HU</div>
+        <div class="header" onclick="toggleOptions('options2')">BB vs OR</div>
+        <div class="header" onclick="toggleOptions('options3')">BB vs LIMP</div>
+    </div>
+    <div class="container">
+        <div class="row" id="options1">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="160.png" data-legend="">25+</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="161.png" data-legend="">21</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="162.png" data-legend="">17</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="163.png" data-legend="">15</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="164.png" data-legend="">13</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="165.png" data-legend="">11</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="167.png" data-legend="">9</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="168.png" data-legend="">8</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="169.png" data-legend="">7</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="170.png" data-legend="">NASH P</div>
+        </div>
+        <div class="row" id="options2" style="display: none;">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="180.png" data-legend="">25+</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="181.png" data-legend="">21</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="182.png" data-legend="">17</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="183.png" data-legend="">15</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="184.png" data-legend="">13</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="185.png" data-legend="">vs SB OS</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="186.png" data-legend="">NASH C</div>
+            
+        </div>
+        <div class="row" id="options3" style="display: none;">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="190.png" data-legend="">25+</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="191.png" data-legend="">21</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="192.png" data-legend="">17</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="193.png" data-legend="">15</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="194.png" data-legend="">13</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="195.png" data-legend="">11</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="197.png" data-legend="">9</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="198.png" data-legend="">8</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="199.png" data-legend="">7</div>
+        </div>
+        
+
+        
+    </div>
+    <div>
+        <div id="image"></div>
+        <div id="image2"></div>
+    </div>
+
+    <script>
+        function toggleOptions(elementId) {
+            var options = document.querySelectorAll(".row");
+            for (var i = 0; i < options.length; i++) {
+                options[i].style.display = "none";
+            }
+
+            var selectedOptions = document.getElementById(elementId);
+            if (selectedOptions) {
+                selectedOptions.style.display = "flex";
+
+                var headers = document.querySelectorAll(".header");
+                for (var j = 0; j < headers.length; j++) {
+                    headers[j].classList.remove("active");
+                }
+                var selectedHeader = document.querySelector(".header[onclick=\"toggleOptions('" + elementId + "')\"]");
+                if (selectedHeader) {
+                    selectedHeader.classList.add("active");
+
+                    var cells = selectedOptions.querySelectorAll(".cell");
+                    for (var k = 0; k < cells.length; k++) {
+                        cells[k].classList.remove("active");
+                    }
+                    var firstCell = selectedOptions.querySelector(".cell");
+                    if (firstCell) {
+                        firstCell.classList.add("active");
+
+                        var img = firstCell.getAttribute("data-img");
+                        var legend = firstCell.getAttribute("data-legend");
+                        loadImage(img, legend);
+                    }
+                }
+            }
+        }
+
+        function toggleClicked(element) {
+            var cells = element.parentNode.querySelectorAll(".cell");
+            for (var k = 0; k < cells.length; k++) {
+                cells[k].classList.remove("active");
+            }
+            element.classList.add("active");
+
+            var img = element.getAttribute("data-img");
+            var legend = element.getAttribute("data-legend");
+
+            loadImage(img, legend);
+        }
+
+        function loadImage(img, legend) {
+            var image = document.getElementById("image");
+            var image2 = document.getElementById("image2");
+            if (img) {
+                image.innerHTML = "<img src='" + img + "'/>";
+                image2.innerHTML = "<img src='" + legend + "'/>";
+            } else {
+                image.innerHTML = "";
+                image2.innerHTML = "";
+            }
+        }
+    </script>
+</body>
+</html>

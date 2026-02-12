@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Segoe UI;
+            background-color: #f5f5f5; /* Gris muy claro */
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+        .header {
+            flex-basis: 100px;
+            border: 1px solid black;
+            padding: 7px;
+            text-align: center;
+            cursor: pointer;
+            background-color: azure;
+        }
+        .row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cell {
+    flex-basis: calc(100% / 6);
+    box-sizing: border-box;
+    border: 1px solid black;
+    padding: 2px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 13px; /* Tamaño de fuente deseado */
+}
+        .active {
+            background-color: #555;
+            color: white;
+        }
+        #image {
+            height: 500px;
+            width: 570px;
+        }
+        #image2 {
+            height: 500px;
+            width: 500px;
+        }
+
+        #image img,
+        #image2 img {
+    max-width: 475px;
+    min-height: 450px
+   
+}
+#options4 {
+        flex-basis: 100%; /* Hace que el div ocupe todo el ancho disponible */
+        /*min-height: 100px;  Establece una altura mínima para asegurar que se expanda */
+    }
+
+    </style>
+    <title>IIIPLA</title>
+</head>
+<body onload="loadImage('1.png','')">
+    <div class="container">
+        <div class="header active" onclick="toggleOptions('options1')">BTN</div>
+        <div class="header" onclick="toggleOptions('options2')">SBvsBTN</div>
+        <div class="header" onclick="toggleOptions('options3')">BBvsBTN</div>
+        <div class="header" onclick="toggleOptions('options4')">SBvsBB</div>
+        <div class="header" onclick="toggleOptions('options5')">BBvsSB</div>
+        <div class="header" onclick="toggleOptions('options6')">vs OS</div>
+    </div>
+    <div class="container">
+        <div class="row" id="options1">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="1.png" data-legend="">+18</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="2.png" data-legend="">14-18</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="3.png" data-legend="">11-14</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="4.png" data-legend="">8-11</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="5.png" data-legend="">6-8</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="6.png" data-legend="">PUSH</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="7.png" data-legend="">25 SB REG</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="8.png" data-legend="">15 SB REG</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="9.png" data-legend="">SQZ 2 FISH</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="10.png" data-legend="">SQZ BB REG</div>
+        </div>
+        <div class="row" id="options2" style="display: none;">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="23.png" data-legend="">+18 vs MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="13.png" data-legend="">14-18 vs MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="14.png" data-legend="">11-14 vs MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="15.png" data-legend="">8-11 vs MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="16.png" data-legend="">6-8vs MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="17.png" data-legend="">vs BTN OS</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="18.png" data-legend="">+18vs L</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="19.png" data-legend="">14-18vs L</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="20.png" data-legend="">11-14vs L</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="21.png" data-legend="">8-11vs L</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="22.png" data-legend="">6-8vs L</div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="" data-img="22.png" data-legend=""> BB REG</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="12.png" data-legend="">25BB</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="51.png" data-legend="">15BB</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="52.png" data-legend="">10BB</div>
+        </div>
+        <div class="row" id="options3" style="display: none;">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="24.png" data-legend="">+18 vs MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="25.png" data-legend="">14-18 vs MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="26.png" data-legend="">11-14 vs MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="27.png" data-legend="">8-11 vs MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="28.png" data-legend="">6-8vs MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="29.png" data-legend="">3x20-25 MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="30.png" data-legend="">+18vs L</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="31.png" data-legend="">14-18vs L</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="32.png" data-legend="">11-14vs L</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="33.png" data-legend="">8-11vs L</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="34.png" data-legend="">6-8vs L</div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="" data-img="" data-legend="">SB REG</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="63.png" data-legend="">25BB</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="64.png" data-legend="">15BB</div>
+        </div>
+        <div class="row" id="options4" style="display: none;">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="35.png" data-legend="">+18</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="36.png" data-legend="">14-18</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="37.png" data-legend="">11-14</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="38.png" data-legend="">8-11</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="39.png" data-legend="">6-8</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="170.png" data-legend="">NASH P</div>
+        </div>
+        <div class="row" id="options5" style="display: none;">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="40.png" data-legend="">+18 vs MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="41.png" data-legend="">14-18 vs MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="42.png" data-legend="">11-14 vs MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="43.png" data-legend="">8-11 vs MR</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="44.png" data-legend="">6-8vs MR</div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="" data-img="" data-legend="">ORx3</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="45.png" data-legend="">3x20+vs8%</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="57.png" data-legend="">20BBvs3X</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="58.PNG" data-legend="">15BBvs3X</div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="46.png" data-legend="">18vs L</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="47.png" data-legend="">14-18vs L</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="48.png" data-legend="">11-14vs L</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="49.png" data-legend="">8-11vs L</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="50.png" data-legend="">6-8vs L</div>
+        </div>
+        <div class="row" id="options6" style="display: none;">
+            <div class="cell active" onclick="toggleClicked(this)" data-img="53.png" data-legend="">BBvsBTN OS</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="54.png" data-legend="">BBvsBTN-SB</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="55.png" data-legend="">BBvsSB OS</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="56.png" data-legend="">SBvsBTN OS</div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="" data-img="" data-legend=""></div>
+            <div class="cell" onclick="" data-img="" data-legend="">SQZ</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="59.png" data-legend="">18+</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="60.png" data-legend="">14-18</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="61.png" data-legend="">11-14</div>
+            <div class="cell" onclick="toggleClicked(this)" data-img="62.png" data-legend="">8-11</div>
+        </div>
+
+        
+    </div>
+    <div>
+        <div id="image"></div>
+        <div id="image2"></div>
+    </div>
+
+    <script>
+        function toggleOptions(elementId) {
+            var options = document.querySelectorAll(".row");
+            for (var i = 0; i < options.length; i++) {
+                options[i].style.display = "none";
+            }
+
+            var selectedOptions = document.getElementById(elementId);
+            if (selectedOptions) {
+                selectedOptions.style.display = "flex";
+
+                var headers = document.querySelectorAll(".header");
+                for (var j = 0; j < headers.length; j++) {
+                    headers[j].classList.remove("active");
+                }
+                var selectedHeader = document.querySelector(".header[onclick=\"toggleOptions('" + elementId + "')\"]");
+                if (selectedHeader) {
+                    selectedHeader.classList.add("active");
+
+                    var cells = selectedOptions.querySelectorAll(".cell");
+                    for (var k = 0; k < cells.length; k++) {
+                        cells[k].classList.remove("active");
+                    }
+                    var firstCell = selectedOptions.querySelector(".cell");
+                    if (firstCell) {
+                        firstCell.classList.add("active");
+
+                        var img = firstCell.getAttribute("data-img");
+                        var legend = firstCell.getAttribute("data-legend");
+                        loadImage(img, legend);
+                    }
+                }
+            }
+        }
+
+        function toggleClicked(element) {
+            var cells = element.parentNode.querySelectorAll(".cell");
+            for (var k = 0; k < cells.length; k++) {
+                cells[k].classList.remove("active");
+            }
+            element.classList.add("active");
+
+            var img = element.getAttribute("data-img");
+            var legend = element.getAttribute("data-legend");
+
+            loadImage(img, legend);
+        }
+
+        function loadImage(img, legend) {
+            var image = document.getElementById("image");
+            var image2 = document.getElementById("image2");
+            if (img) {
+                image.innerHTML = "<img src='" + img + "'/>";
+                image2.innerHTML = "<img src='" + legend + "'/>";
+            } else {
+                image.innerHTML = "";
+                image2.innerHTML = "";
+            }
+        }
+    </script>
+</body>
+</html>
