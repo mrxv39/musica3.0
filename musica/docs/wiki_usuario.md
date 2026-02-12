@@ -1,7 +1,8 @@
 # Notas de estabilidad
 
-- Se ha mejorado la estabilidad para evitar caídas ocasionales durante los bucles de reconocimiento.
-- No se requieren cambios por parte del usuario.
+- El sistema ahora soporta 4 mesas simultáneas.
+- Cada worker puede operar en paralelo sin colisiones de click.
+- El sistema es estable y verificado en producción.
 
 # Corrección automática de stacks
 
@@ -20,5 +21,13 @@ The system is currently fully operational. The following detections and features
 - STACKEFECT
 - Card recognition
 - Exit condition
+
+# Stable click system v1.0
+
+- Multi-worker click lock implemented
+- 4 workers can run simultaneously
+- Lock file: runtime\blockclick.txt
+- No click collisions
+- System verified stable
 
 The next phase will be an internal structural refactor. There will be **no changes to visible behavior** for the user.

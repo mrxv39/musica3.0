@@ -1,4 +1,8 @@
-﻿#include includes\funciones2.ahk
+﻿; NOTE: clicktablas() now uses a cross-process lock file in ..\runtime\blockclick.lock for mouse safety.
+; Ensure ..\runtime\ exists and is writable. See includes\funciones2.ahk for details.
+global CLICK_LOCK_DEBUG := 1
+
+#include includes\funciones2.ahk
 global situacionfinal
 
 
@@ -76,6 +80,26 @@ if (p3 = "gris" || p3 = "verde" || p3 = "azul" || p3 = "negro")
 }
 
 ;MsgBox, p1btn %p1btn% p1bet %p1bet% 
+
+
+; --- DEBUG: Confirm all arguments received ---
+runtimeDir := A_ScriptDir . "\..\runtime"
+if !FileExist(runtimeDir)
+    FileCreateDir, %runtimeDir%
+
+debugFile := runtimeDir . "\BTN_args_debug.txt"
+
+f := FileOpen(debugFile, "a")
+if (IsObject(f)) {
+    f.WriteLine("----- " . A_Now . " -----")
+    f.WriteLine("Total args: " . A_Args.Length())
+    Loop % A_Args.Length() {
+        f.WriteLine("Arg " . A_Index . ": " . A_Args[A_Index])
+    }
+    f.WriteLine("---------------------------")
+    f.Close()
+}
+
 
 
 resultado := BTN(posx, posy, mesa, x1, y1, x2, y2, alto, ancho, x1t, y1t, altot, anchot, p2name, p2stack, p2bet, p2btn, p3name, p3stack, p3bet, p3btn, stackefect, p1bet, p1btn, mano, p2, p3, save_img_mesa, p2manos_3h, p2vip_3h, p2pfr_3h, p2_3bet_3h, p3manos_3h,p3vip_3h, p3pfr_3h, p3_3bet_3h, p2_manos_hu_db, p2_vip_hu, p2_pfr_hu, p2_bet_3_hu, p3_manos_hu_db, p3_vip_hu, p3_pfr_hu, p3_bet_3_hu) 
@@ -286,7 +310,9 @@ btnvsreg(manos, stackvalue, mesa, x1t, y1t, anchot, altot, alto, ancho, x1, y1, 
 	    {
 	        return
 	    }
+		
 	    situacionfinal := "btn 25+"
+		;MsgBox, % situacionfinal
 	    poscionclick("IIIMU", x1t, y1t, anchot, altot)
 		poscionclick("O61", x1t, y1t, anchot, altot)
 		poscionclick("F1P1", x1t, y1t, anchot, altot)

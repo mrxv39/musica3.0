@@ -1,4 +1,3 @@
-
 # MUSICA 3.0 — Arquitectura Técnica (Stable)
 
 ## Estado Actual
@@ -40,6 +39,30 @@ musica/
 
 3. legacy_worker.py
    - Contiene toda la lógica original (detección, OCR, scripts AHK)
+
+---
+
+## Stable click system v1.0
+
+### clicktablas() — Multi-worker lock
+
+- Usa CoordMode Mouse, Screen
+- Usa sistema de lock basado en archivo:
+    runtime\blockclick.txt
+- Espera mientras el archivo lock existe (Sleep 100ms loop)
+- Crea archivo lock antes del click
+- Ejecuta click principal
+- Restaura posición original del mouse
+- Realiza click final en posición original
+- Elimina archivo lock tras ejecución
+- Lock es portable usando A_ScriptDir
+
+### Estado
+
+- 4 workers simultáneos
+- Cada worker lanzado manualmente por CLI
+- Lock previene colisiones de click
+- Sistema verificado con 4 mesas
 
 ---
 

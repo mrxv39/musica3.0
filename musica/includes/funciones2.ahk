@@ -482,7 +482,7 @@ poscionclick(elemento, x1t, y1t, anchot, altot)
     }
     else if (elemento = "IIIMU")
     {
-        
+        ;MsgBox, clicky %elemento%
         clickx := Round(x1t+62+(anchot*0.4)) ;262
         clicky := Round(y1t+(altot*0.0828857))
         clicktablas(clickx, clicky)
@@ -736,57 +736,138 @@ poscionclick(elemento, x1t, y1t, anchot, altot)
 
 
 clicktablas(xclic, yclic)
-{   
-    
-    ;MsgBox, %xclic%, %yclic%
-    /*
-    bloqueoFile := A_ScriptDir . "\bloqueo.txt"
-    startTime := A_TickCount  ; Guardar el tiempo de inicio antes del bucle
-
-    Loop  ; Bucle indefinido
-    {
-        If !FileExist(bloqueoFile)  ; Si el archivo de bloqueo no existe...
-        {
-            ;MsgBox, No existe bloqueo
-            Break  ; ... romper el ciclo
-        }
-        Sleep, 100  ; Esperar 100 ms antes de comprobar de nuevo
-
-        If (A_TickCount - startTime >= 2000)  ; Si ha transcurrido 2 segundos (2000 ms)
-        {
-            ;MsgBox, Se alcanzó el tiempo máximo de espera. Saliendo del bucle.
-            Break  ; Salir del bucle
-        }
-    }
-    */
-
-    ; Crear el archivo de bloqueo
-    FileAppend, , %bloqueoFile%
-
-    ; Establecer el modo de coordenadas del ratón a la pantalla
+{
     CoordMode, Mouse, Screen
+    SetMouseDelay, -1
+    SetDefaultMouseSpeed, 0
 
-    ; Bloquear el movimiento del ratón
-    BlockInput, MouseMove
+    runtimeDir := A_ScriptDir . "\runtime"
+    lockFile   := runtimeDir . "\blockclick.txt"
 
-    ; Guardar las coordenadas originales del cursor
+    ; Guardar posición actual
+    MouseGetPos, origX, origY
+
+    ; Esperar mientras exista el lock
+    while (FileExist(lockFile))
+        Sleep, 100
+
+    ; Crear lock
+    FileAppend,, %lockFile%
+
+    ; --- CLICK PRINCIPAL ---
+    MouseMove, %xclic%, %yclic%, 0
+    Click, %xclic%, %yclic%
+    ; ------------------------
+
+    ; --- VOLVER A POSICIÓN ORIGINAL ---
+    MouseMove, %origX%, %origY%, 0
+    Click, %origX%, %origY%
+    ; -----------------------------------
+
+    ; Borrar lock
+    FileDelete, %lockFile%
+
+    return
+}
+
+
+clicktablas2(xclic, yclic)
+{
+    ;MsgBox, clickx %xclic% clicky %yclic%
+    ; --- Cross-process mouse click lock using lock file (AHK v1) ---
+    global CLICK_LOCK_DEBUG
+
+    ; Paths (runtime next to project root)
+    runtimeDir := A_ScriptDir . "\..\runtime"
+    if !FileExist(runtimeDir)
+        FileCreateDir, %runtimeDir%
+
+    lockFile := runtimeDir . "\blockclick.lock"
+    logFile  := runtimeDir . "\click_lock.log"
+
+    ; Lock params
+    lockTimeout  := 3000   ; ms max wait
+    staleTimeout := 4000   ; ms to consider stale lock
+    sleepStep    := 15     ; ms
+
+    myPID := DllCall("GetCurrentProcessId")
+    startWait := A_TickCount
+    acquired := false
+
+    ; Acquire lock
+    Loop
+    {
+        if !FileExist(lockFile)
+        {
+            ts := A_TickCount
+            FileDelete, %lockFile%  ; defensive
+            FileAppend, %ts% "," myPID, %lockFile%
+
+            ; Confirm we got it (avoid race)
+            Sleep, 5
+            FileRead, lockContent, %lockFile%
+            if (lockContent = ts "," myPID)
+            {
+                acquired := true
+                break
+            }
+        }
+        else
+        {
+            ; Check staleness
+            FileRead, lockContent, %lockFile%
+            StringSplit, arr, lockContent, `,
+            lockTS  := arr1
+            lockPID := arr2
+
+            age := A_TickCount - lockTS
+            if (age > staleTimeout)
+            {
+                FileDelete, %lockFile%
+                if (CLICK_LOCK_DEBUG)
+                    FileAppend, %A_Now% "," myPID ",stale_delete`n", %logFile%
+                continue
+            }
+        }
+
+        if (A_TickCount - startWait > lockTimeout)
+        {
+            if (CLICK_LOCK_DEBUG)
+                FileAppend, %A_Now% "," myPID ",timeout`n", %logFile%
+            return  ; bail safely: no click
+        }
+
+        Sleep, %sleepStep%
+    }
+
+    if (CLICK_LOCK_DEBUG && acquired)
+        FileAppend, %A_Now% "," myPID ",acquire," xclic "," yclic "`n", %logFile%
+
+    ; --- Critical section ---
+    CoordMode, Mouse, Screen
     MouseGetPos, originalX, originalY
     SetMouseDelay, 0
 
-    ; Realizar el clic en las coordenadas especificadas
-    Click, %xclic%, %yclic%
+    try
+    {
+        ; Si BlockInput te dio problemas antes, comenta estas 2 líneas.
+        BlockInput, MouseMove
 
-    ; Mover el cursor a las coordenadas originales
-    MouseMove, %originalX%, %originalY%
+        Click, %xclic%, %yclic%
+        MouseMove, %originalX%, %originalY%
+    }
+    finally
+    {
+        BlockInput, MouseMoveOff
 
-    ; Desbloquear el movimiento del ratón
-    BlockInput, MouseMoveOff
+        ; Release lock always
+        FileDelete, %lockFile%
 
-
-    ; Eliminar el archivo de bloqueo al finalizar
-    ;FileDelete, %bloqueoFile%
-    
+        if (CLICK_LOCK_DEBUG && acquired)
+            FileAppend, %A_Now% "," myPID ",release," xclic "," yclic "`n", %logFile%
+    }
 }
+
 
 
 

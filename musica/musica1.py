@@ -1192,19 +1192,20 @@ region_carta2 = (x1 +389, y1 +408, 50, 35)
 region_carta1_flop = (x1 + 265, y1 + 225, 20, 10)
 region_tanto_porciento = (x1 +265, y1 + 472, 62, 150)
 
-
 def ejecutar_busqueda_concurrente():
     global carta1_flop
+    global palo1, palo2
+    global mano
+
     carta1_flop = "desconocido"
-    start_time = time.time() #________________________________________________________________________________________________________________________________________________
+    palo1 = None
+    palo2 = None
+
+    start_time = time.time()
+
     p1name = None
     p2name = None
     p3name = None
-    global palo1, palo2
-    palo1 = None
-    palo2 = None
-    #ejecutar_script_captura_screenshot_mesa(x1, y1, x2, y2,ruta_base, mesa)
-    #MsgBox, clicky %elemento%
 
     result_queue = Queue()
     threads = []
@@ -1217,103 +1218,76 @@ def ejecutar_busqueda_concurrente():
         future_tercera_imagen = executor.submit(capturar_imagen, region_tercera_imagen)
         future_cuarta_imagen = executor.submit(capturar_imagen, region_tanto_porciento)
 
-
         imagen_primera = future_primera_imagen.result()
         imagen_segunda = future_segunda_imagen.result()
         imagen_tercera = future_tercera_imagen.result()
         imagen_tanto_porciento = future_cuarta_imagen.result()
-        
-   
 
         # Buscar imágenes dentro de las capturas
         future_primera = executor.submit(encontrar_imagen, ruta_img_time, imagen_primera, region_primera_imagen)
         future_tercera = executor.submit(encontrar_imagen, ruta_img_dealer, imagen_tercera, region_tercera_imagen)
         future_cuarta_imagen = executor.submit(encontrar_imagen, ruta_img_tanto_porciento, imagen_tanto_porciento, region_tanto_porciento)
 
-        
-
-        #COPIAR LA FORMA PARA NO IMPRIMIR INDEDINIDAMENTE LOS PRINT
-
         ubicacion_primera = future_primera.result()
 
-        #print(stackefect_color)
         if ubicacion_primera[0]:
-            #print(f"TIME ECONTRADO: {ubicacion_primera[1]}")
             print(f"TIME ECONTRADO:")
             posx, posy = ubicacion_primera[1]
-
-            #time.sleep(0.14)
 
             if carta1_flop == "negro":
                 print(f"NO BOARD ENCONTRADO: ")
 
-
                 resultado_tercera = future_tercera.result()
                 if resultado_tercera[0]:
                     ubicacion_tercera = resultado_tercera[1]
-                    #print(f"Tercera imagen encontrada en coordenadas: {ubicacion_tercera}")
                     print(f"DEALER ENCONTRADO")
 
                     ubicacion_tanto = future_cuarta_imagen.result()
                     if ubicacion_tanto[0]:
                         print(f"STACKEFECT ENCONTRADO")
-                        #FIN CAPTURA Y RECONOCIMIENTO DE IMAGENES
+                        # FIN CAPTURA Y RECONOCIMIENTO DE IMAGENES
 
-                        capture_time = time.time() - start_time #________________________________________________________________________________________________________________________________
+                        capture_time = time.time() - start_time  # ______________________________________________________________________________________________________
 
                         start_save_screen = time.time()
                         timestamp = datetime.now().strftime("%Y%m%d%H%M%S%f")[:-3]
                         save_img_mesa = os.path.join(ruta_base, 'img', 'errores', 'screenshot_{}.bmp'.format(timestamp))
                         save_txt_mesa = os.path.join(ruta_base, 'img', 'errores', 'screenshot_{}.txt'.format(timestamp))
                         if foto:
-                            #start_time = time.time()
                             future_screenshot = executor.submit(ejecutar_script_captura_screenshot, x1, y1, x2, y2, save_img_mesa)
-                        #end_time = time.time()
 
-                        #print(f"HACER CAPTURA: {end_time - start_time:.4f} segundos")
-                        # Medir tiempo de captura de imágenes
-                        
+                        save_screen_time = time.time() - start_save_screen  # ______________________________________________________________________________________________________
 
-                        
-                        save_screen_time = time.time() - start_save_screen  #________________________________________________________________________________________________________________________________
-            
                         # Medir tiempo de ejecución de OCR
-                        start_ocr_time = time.time()            #____________________________________________________________________________________________________________________________________________
-                        # Definir las regiones para la captura y procesamiento de OCR
+                        start_ocr_time = time.time()  # ______________________________________________________________________________________________________________
                         regions = [
-                            ((x1 + 50, y1 +178, 103, 18), 220, '', '', 'p2name'), 
+                            ((x1 + 50, y1 + 178, 103, 18), 220, '', '', 'p2name'),
                             ((x1 + 70, y1 + 198, 60, 18), 230, '0123456789.', '--psm 7 -c tessedit_char_whitelist=0123456789.', 'p2stack'),
                             ((x1 + 160, y1 + 220, 55, 20), 200, '0123456789.', '--psm 7 -c tessedit_char_whitelist=0123456789.', 'p2bet'),
-                            ((x1 + 625, y1 +178, 103, 18), 220, '', '--psm 7', 'p3name'),
-                            ((x1 + 645, y1 +198, 60, 18), 250, '0123456789.', '--psm 7 -c tessedit_char_whitelist=0123456789.', 'p3stack'),
-                            ((x1 + 565, y1 +220, 50, 20), 200, '0123456789.', '--psm 7 -c tessedit_char_whitelist=0123456789.', 'p3bet'),
-                            #((posx - 10, posy - 270, 90, 23), 200, '', '--psm 7', 'bote_grande'),
-                            #((posx + 0, posy - 170, 50, 40), 200, '0123456789.', '--psm 7 -c tessedit_char_whitelist=0123456789.', 'bote'),
-                            ((x1 +388, y1 +378, 50, 20), 200, '', '--psm 6 -c tessedit_char_whitelist=0123456789dhsc', 'p1bet'),
-                            ((x1 +338, y1 +408, 50, 35), 230, '', '--psm 6 --oem 3', 'carta1'),
-                            ((x1 +389, y1 +408, 50, 35), 230, '', '--psm 6 --oem 3', 'carta2'),
-                            ((x1 + 265, y1 + 225, 20, 10), 200, '', '--psm 6', 'carta1_flop'),   
-                            ((x1 +265, y1 + 472, 72, 42), 100, '', '--psm 7', 'stackefect'), 
+                            ((x1 + 625, y1 + 178, 103, 18), 220, '', '--psm 7', 'p3name'),
+                            ((x1 + 645, y1 + 198, 60, 18), 250, '0123456789.', '--psm 7 -c tessedit_char_whitelist=0123456789.', 'p3stack'),
+                            ((x1 + 565, y1 + 220, 50, 20), 200, '0123456789.', '--psm 7 -c tessedit_char_whitelist=0123456789.', 'p3bet'),
+                            ((x1 + 388, y1 + 378, 50, 20), 200, '', '--psm 6 -c tessedit_char_whitelist=0123456789dhsc', 'p1bet'),
+                            ((x1 + 338, y1 + 408, 50, 35), 230, '', '--psm 6 --oem 3', 'carta1'),
+                            ((x1 + 389, y1 + 408, 50, 35), 230, '', '--psm 6 --oem 3', 'carta2'),
+                            ((x1 + 265, y1 + 225, 20, 10), 200, '', '--psm 6', 'carta1_flop'),
+                            ((x1 + 265, y1 + 472, 72, 42), 100, '', '--psm 7', 'stackefect'),
                         ]
-      
-                        # Configurar un máximo de 16 hilos
-                        max_threads = 16
 
-                        # Limitar el número de hilos si hay menos regiones que hilos máximos
+                        max_threads = 16
                         num_threads = min(max_threads, len(regions))
 
-                        # Iniciar hilos para capturar y procesar OCR en las regiones especificadas
                         for i in range(num_threads):
                             region, scale_percent, whitelist, config, result_key = regions[i]
-                            thread = threading.Thread(target=capture_and_process, args=(region, scale_percent, whitelist, config, result_key, result_queue, save_path))
+                            thread = threading.Thread(
+                                target=capture_and_process,
+                                args=(region, scale_percent, whitelist, config, result_key, result_queue, save_path)
+                            )
                             threads.append(thread)
                             thread.start()
 
-                        # Esperar a que todos los hilos terminen
                         for thread in threads:
                             thread.join()
-
-                        
 
                         # Recopilar resultados de OCR
                         results = {}
@@ -1321,18 +1295,12 @@ def ejecutar_busqueda_concurrente():
                             results.update(result_queue.get())
 
                         print("Resultados OCR:")
+                        ocr_time = time.time() - start_ocr_time  # ______________________________________________________________________________________________________
 
-                        # Medir tiempo de OCR
-                        ocr_time = time.time() - start_ocr_time #______________________________________________________________________________________________________________________________________
-
-
-
-
-
-
-                        start_resto = time.time()               #______________________________________________________________________________________________________________________________________
+                        start_resto = time.time()  # ________________________________________________________________________________________________________________
                         x_dealer, ydealer = ubicacion_tercera
-                        print(posx , x_dealer)
+                        print(posx, x_dealer)
+
                         if 100 < (posx - x_dealer) < 240:
                             p1btn = 1
                             p2btn = 0
@@ -1346,40 +1314,59 @@ def ejecutar_busqueda_concurrente():
                             p2btn = 1
                             p3btn = 0
 
-                        
-                        variables_a_extraer = ["p2name", "p2stack", "p2bet", "p3name", "p3stack", "p3bet", "stackefect", "bote_grande", "bote", "p1bet", "carta1", "carta2", "carta1_flop"]
+                        variables_a_extraer = ["p2name", "p2stack", "p2bet", "p3name", "p3stack", "p3bet",
+                                               "stackefect", "bote_grande", "bote", "p1bet",
+                                               "carta1", "carta2", "carta1_flop"]
 
-
-                        # Diccionario para almacenar los resultados extraídos
                         valores_extraidos = {}
-
-                        # Iterar sobre las variables que quieres extraer
                         for variable in variables_a_extraer:
                             if variable in results:
                                 valores_extraidos[variable] = results[variable]
                             else:
-                                valores_extraidos[variable] = None  # Manejar el caso si la variable no está presente
+                                valores_extraidos[variable] = None
 
-                        # Imprimir los valores extraídos (opcional)
                         print("Valores extraídos:")
                         for variable, valor in valores_extraidos.items():
                             print(f"{variable} = {valor}")
-                            
 
+                        # =====================================================================
+                        # FIX CRÍTICO: asignar variables desde OCR (valores_extraidos) ANTES de validar/pasar a AHK
+                        # =====================================================================
+                        def _s(v):
+                            if v is None:
+                                return None
+                            return str(v).strip()
 
+                        p2name = _s(valores_extraidos.get("p2name"))
+                        p3name = _s(valores_extraidos.get("p3name"))
+                        p2stack = _s(valores_extraidos.get("p2stack"))
+                        p3stack = _s(valores_extraidos.get("p3stack"))
+                        p2bet = _s(valores_extraidos.get("p2bet"))
+                        p3bet = _s(valores_extraidos.get("p3bet"))
+                        stackefect = _s(valores_extraidos.get("stackefect"))
+                        p1bet = _s(valores_extraidos.get("p1bet")) or ""
+                        bote = _s(valores_extraidos.get("bote"))
+                        bote_grande = _s(valores_extraidos.get("bote_grande"))
+                        carta1 = _s(valores_extraidos.get("carta1")) or ""
+                        carta2 = _s(valores_extraidos.get("carta2")) or ""
+                        # carta1_flop ya es global por tu pipeline; pero dejamos la extracción también
+                        carta1_flop_local = _s(valores_extraidos.get("carta1_flop"))
 
+                        # Si por lo que sea OCR de carta1_flop llega aquí, no rompemos nada:
+                        if carta1_flop_local:
+                            carta1_flop = carta1_flop_local
+                        # =====================================================================
 
-
-                        #CONSULTAR SI EL JUGADOR ESTA EN NUESTRA DB 
-                        
+                        # CONSULTAR SI EL JUGADOR ESTA EN NUESTRA DB
                         p2name = verificar_name(p2name)
-                        print("P2 NAME",p2name)
+                        print("P2 NAME", p2name)
                         p2_id = db_sqlite.get_player_id(p2name)
                         print(p2_id)
+
                         if p2_id != None:
                             p2_manos_3h_db = db_sqlite.get_manos_3h(p2name)
                             p2_manos_hu_db = db_sqlite.get_manos_hu(p2name)
-                            print("Manos HU",p2_manos_hu_db)
+                            print("Manos HU", p2_manos_hu_db)
 
                             if p2_manos_3h_db != None:
                                 result = assign_values_to_variables_3h(p2_id)
@@ -1420,7 +1407,6 @@ def ejecutar_busqueda_concurrente():
                                 p2_overbet_turn_3h = None
                                 p2_overbet_river_3h = None
 
-
                             if p2_manos_hu_db != None:
                                 result = assign_values_to_variables_hu(p2_id)
                                 if result:
@@ -1435,7 +1421,6 @@ def ejecutar_busqueda_concurrente():
                                     p2_overbet_freq_hu = result['OVERBET_FREQ']
                                     p2_overbet_turn_hu = result['OVERBET_TURN']
                                     p2_overbet_river_hu = result['OVERBET_RIVER']
-
                                 else:
                                     p2_vip_hu = None
                                     p2_pfr_hu = None
@@ -1482,23 +1467,15 @@ def ejecutar_busqueda_concurrente():
                             p2_overbet_turn_hu = None
                             p2_overbet_river_hu = None
 
-
-
-
-
-
-
-
-
                         p3name = verificar_name(p3name)
-                        print("P3 NAME",p3name)
+                        print("P3 NAME", p3name)
                         p3_id = db_sqlite.get_player_id(p3name)
-                        print("P3 ID",p3_id)
+                        print("P3 ID", p3_id)
                         if p3_id != None:
                             p3_manos_3h_db = db_sqlite.get_manos_3h(p3name)
                             p3_manos_hu_db = db_sqlite.get_manos_hu(p3name)
-                            print("P3 Manos 3H",p3_manos_3h_db) 
-                            print("P3 Manos HU",p3_manos_hu_db)
+                            print("P3 Manos 3H", p3_manos_3h_db)
+                            print("P3 Manos HU", p3_manos_hu_db)
 
                             if p3_manos_3h_db != None:
                                 result = assign_values_to_variables_3h(p3_id)
@@ -1526,7 +1503,6 @@ def ejecutar_busqueda_concurrente():
                                     p3_overbet_freq_3h = None
                                     p3_overbet_turn_3h = None
                                     p3_overbet_river_3h = None
-
                             else:
                                 p3_player_id = None
                                 p3_vip_3h = None
@@ -1539,7 +1515,6 @@ def ejecutar_busqueda_concurrente():
                                 p3_overbet_freq_3h = None
                                 p3_overbet_turn_3h = None
                                 p3_overbet_river_3h = None
-
 
                             if p3_manos_hu_db != None:
                                 result = assign_values_to_variables_hu(p3_id)
@@ -1566,8 +1541,6 @@ def ejecutar_busqueda_concurrente():
                                     p3_overbet_freq_hu = None
                                     p3_overbet_turn_hu = None
                                     p3_overbet_river_hu = None
-
-                                
                             else:
                                 p3_vip_hu = None
                                 p3_pfr_hu = None
@@ -1603,20 +1576,7 @@ def ejecutar_busqueda_concurrente():
                             p3_overbet_turn_hu = None
                             p3_overbet_river_hu = None
 
-
-
-
-
-
-
-
-
                         print(p1btn, p2btn, p3btn)
-                        #print("P2 : ", p2)
-                        #print("P3 : ", p3)
-
-
-
 
                         palo1 = locals().get("palo1") if "palo1" in locals() else globals().get("palo1")
                         palo2 = locals().get("palo2") if "palo2" in locals() else globals().get("palo2")
@@ -1628,62 +1588,21 @@ def ejecutar_busqueda_concurrente():
                         result_carta1 = buscar_img_carta1(ruta_base, palo1)
                         result_carta2 = buscar_img_carta2(ruta_base, palo2)
 
-                        # Safely extract carta1/carta2 from OCR results if present
-                        carta1 = str(locals().get("carta1") or globals().get("carta1") or "").strip()
-                        carta2 = str(locals().get("carta2") or globals().get("carta2") or "").strip()
-
                         valid_chars = set("23456789TJQKA")
-
                         if carta1 and set(carta1).issubset(valid_chars):
                             result_carta1 = carta1
-                        # else: keep fallback result_carta1
-
                         if carta2 and set(carta2).issubset(valid_chars):
                             result_carta2 = carta2
-                        # else: keep fallback result_carta2
 
                         global mano
                         mano = str(result_carta1) + str(palo1) + str(result_carta2) + str(palo2)
-
-
                         mano = verificar_mano(mano, x1, y1, x2, y2, save_img_mesa)
-
-                        
 
                         print("Mano: ", mano)
                         print("P2: ", p2)
                         print("P3: ", p3)
- 
 
-                        stackefect = locals().get("stackefect") if "stackefect" in locals() else globals().get("stackefect")
-                        if stackefect is None:
-                            # fallback: try common containers if present (do not crash)
-                            for k in ("valores", "valores_extraidos", "extraidos", "resultado", "res", "data"):
-                                d = locals().get(k)
-                                if isinstance(d, dict) and "stackefect" in d:
-                                    stackefect = d.get("stackefect")
-                                    break
-
-
-                        def _safe_get_var(name, default=None):
-                            if name in locals():
-                                return locals().get(name, default)
-                            return globals().get(name, default)
-
-                        # Pull commonly used OCR/extracted values into this scope to avoid NameError
-                        p2name = _safe_get_var("p2name", None)
-                        p3name = _safe_get_var("p3name", None)
-                        p2stack = _safe_get_var("p2stack", None)
-                        p3stack = _safe_get_var("p3stack", None)
-                        p2bet = _safe_get_var("p2bet", None)
-                        p3bet = _safe_get_var("p3bet", None)
-                        p1bet = _safe_get_var("p1bet", "")
-                        bote = _safe_get_var("bote", None)
-                        bote_grande = _safe_get_var("bote_grande", None)
-                        stackefect = _safe_get_var("stackefect", None)
-                        carta1 = str(_safe_get_var("carta1", "") or "").strip()
-                        carta2 = str(_safe_get_var("carta2", "") or "").strip()
-
+                        # VALIDACIONES NUMÉRICAS (estas son las que estabas pasando a AHK)
                         result_stackefect = verificar_stackefectivo(stackefect)
                         print("Stackefect:", result_stackefect)
 
@@ -1706,23 +1625,16 @@ def ejecutar_busqueda_concurrente():
                             print("NO ESTA P3")
 
                         variables_script = [
-                        str(x1), str(y1), str(mesa), str(x1), str(y1), str(x2), str(y2), str(alto), str(ancho), str(x1t), str(y1t), str(anchot), str(altot), #13 variables
-                        str(p2name), str(result_p2stack), str(result_p2bet), str(p2btn), str(p3name), str(result_p3stack), str(result_p3bet), str(p3btn), str(result_stackefect), # 9 variables
-                        str(result_p1bet), str(p1btn), str(mano), str(p2), str(p3), str(save_img_mesa), str(p2_manos_3h_db), str(p3_manos_3h_db),
-                        str(p2_vip_3h), str(p2_pfr_3h), str(p2_bet_3_3h), str(p3_vip_3h), str(p3_pfr_3h), str(p3_bet_3_3h),
-                        str(p2_manos_hu_db), str(p2_vip_hu), str(p2_pfr_hu), str(p2_bet_3_hu),
-                        str(p3_manos_hu_db), str(p3_vip_hu), str(p3_pfr_hu), str(p3_bet_3_hu),
-
-
-        
-
-
+                            str(x1), str(y1), str(mesa), str(x1), str(y1), str(x2), str(y2), str(alto), str(ancho), str(x1t), str(y1t), str(anchot), str(altot),  # 13 vars
+                            str(p2name), str(result_p2stack), str(result_p2bet), str(p2btn), str(p3name), str(result_p3stack), str(result_p3bet), str(p3btn), str(result_stackefect),  # 9 vars
+                            str(result_p1bet), str(p1btn), str(mano), str(p2), str(p3), str(save_img_mesa), str(p2_manos_3h_db), str(p3_manos_3h_db),
+                            str(p2_vip_3h), str(p2_pfr_3h), str(p2_bet_3_3h), str(p3_vip_3h), str(p3_pfr_3h), str(p3_bet_3_3h),
+                            str(p2_manos_hu_db), str(p2_vip_hu), str(p2_pfr_hu), str(p2_bet_3_hu),
+                            str(p3_manos_hu_db), str(p3_vip_hu), str(p3_pfr_hu), str(p3_bet_3_hu),
                         ]
+
                         scripts_autohotkey(variables_script)
-                        resto_time = time.time() - start_resto # _______________________________________________________________________________________________________________________________________________________-
-
-
-
+                        resto_time = time.time() - start_resto  # ______________________________________________________________________________________________________
 
                         end_time = time.time()
                         if tiempo:
@@ -1732,20 +1644,12 @@ def ejecutar_busqueda_concurrente():
                             print(f"  - OCR: {ocr_time:.4f} segundos")
                             print(f"  - RESTO: {resto_time:.4f} segundos")
 
-                        
                         tiempo_total = time.time() - inicio
                         if tiempo:
                             print(f"ejecutar_busqueda_concurrente: {end_time - start_time:.4f} segundos")
-                            
+
                         print("Tiempo total de ejecución:", round(tiempo_total, 3), "segundos")
 
-
-
-                        # Llamar a la función para crear la ventana principal
-                        #window_thread = threading.Thread(target=create_main_window, args=(x1, y1))
-                        #window_thread.start()
-
-                        # Guardar las variables p2name y p2stack en el archivo
                         with open(save_txt_mesa, "w") as archivo:
                             archivo.write(f"p2color: {p2}\n")
                             archivo.write(f"p2btn: {p2btn}\n")
@@ -1761,18 +1665,11 @@ def ejecutar_busqueda_concurrente():
                             archivo.write(f"p1btn: {p1btn}\n")
                             archivo.write(f"p1bet: {p1bet}\n")
                             archivo.write(f"Mano: {mano}\n")
-                            
-                                                
-                        # Pass p1bet as p1bet_base for scope safety
+
                         p1bet_base = p1bet if p1bet is not None else ""
                         condiciones_salida_preflop(ubicacion_tercera, posx, posy, p1bet_base)
 
-                        #time.sleep(0.005)
-                        
-                        
-
                         ejecutar_script_cerrar_popup_simple(mesa, tiempo=True)
-                        #cerrar_ventanas_por_mesa(mesa)
 
                     else:
                         print("BUSCANDO STACKEFECT")
@@ -1783,7 +1680,6 @@ def ejecutar_busqueda_concurrente():
         else:
             print("BUSCANDO TIME")
 
-    
 
 # Bucle principal
 while True:
