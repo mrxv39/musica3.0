@@ -50,3 +50,19 @@ IMPACTO:
 - Move inicio = time.time() inside proper function
 - Remove legacy global dependencies
 - Validate full preflop → AHK execution stability
+
+------------------------------------------------------------
+## 2026-02-12 — Stabilization & Validation Phase Defined
+
+### Added
+- UI Stability Gate concept (hero cards validation first)
+- AHK situation validation layer definition
+- XML Ground Truth importer architecture plan
+- OCR Statistics Engine design
+
+### Notes
+- No runtime behavior changed yet.
+- This is a documentation and architecture definition update.
+- No ROIs or OCR thresholds modified.
+- Stable click system remains unchanged.
+------------------------------------------------------------

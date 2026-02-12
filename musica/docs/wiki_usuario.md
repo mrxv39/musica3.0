@@ -31,3 +31,24 @@ The system is currently fully operational. The following detections and features
 - System verified stable
 
 The next phase will be an internal structural refactor. There will be **no changes to visible behavior** for the user.
+
+------------------------------------------------------------
+# Upcoming Stability & Accuracy Improvements
+------------------------------------------------------------
+
+The system is currently stable and operational.
+
+The next internal phase will introduce:
+
+- More robust validation of detected cards before actions
+- Additional verification before sending clicks to AutoHotkey
+- Internal comparison with real hand history XML
+- Accuracy statistics engine
+
+These improvements will:
+
+- Increase stability during live play
+- Reduce rare OCR misreads
+- Provide measurable accuracy metrics
+
+No visible behavioral changes are expected for users.
