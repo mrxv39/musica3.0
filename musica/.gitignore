@@ -5,31 +5,19 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.log
-
-# Virtual environment
 .venv/
 venv/
-env/
 
 # ===============================
 # RUNTIME (NO VERSIONAR)
 # ===============================
 runtime/
-runtime/*.txt
-runtime/logs/
 
 # ===============================
 # CAPTURAS AUTOMÁTICAS
 # ===============================
 img/captured_regions_*/
 img/errores/
-
-# Screenshots temporales
-*.bmp
-*.png
-*.jpg
-*.jpeg
 
 # ===============================
 # SISTEMA
