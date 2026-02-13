@@ -1,8 +1,4 @@
-﻿; NOTE: clicktablas() now uses a cross-process lock file in ..\runtime\blockclick.lock for mouse safety.
-; Ensure ..\runtime\ exists and is writable. See includes\funciones2.ahk for details.
-global CLICK_LOCK_DEBUG := 1
-
-#include includes\funciones2.ahk
+﻿#include includes\funciones2.ahk
 global situacionfinal
 
 
@@ -169,6 +165,7 @@ BTN(posx, posy, mesa, x1, y1, x2, y2, alto, ancho, x1t, y1t, altot, anchot, p2na
 				tiempoFin_archivo := A_TickCount
 			    duracion_archivo := (tiempoFin_archivo - tiempoinicio) / 1000
 			    ;MsgBox, tiempo ejecucion btn %duracion_archivo%
+				;MsgBox, situacionglobal %situacionglobal%
 				
 				result2(x1, y1, x2, y2, stackvalue, mesa, mano, situacionglobal, situacionfinal, review, ancho, alto, save_img_mesa, posx, posy, p2manos_3h,p3manos_3h, p2vip_3h, p2pfr_3h, p2_3bet_3h, p3vip_3h, p3pfr_3h, p3_3bet_3h, p2_manos_hu_db, p2_vip_hu, p2_pfr_hu, p2_bet_3_hu, p3_manos_hu_db, p3_vip_hu, p3_pfr_hu, p3_bet_3_hu,p2name,p3name)
     			

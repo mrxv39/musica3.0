@@ -1,3 +1,15 @@
+
+2026-02-13 — Click Engine Refactor Decision
+
+ANTES:
+- Click system worked in DEMO but was inconsistent/failed in REAL live play.
+
+AHORA:
+- Decision: replace click injection system with a new robust click engine (focus + verification + fallback).
+
+IMPACTO:
+- No ROI or OCR changes. Next sprint will implement new click engine to stabilize live behavior.
+
 2026-02-12 — Stack OCR Normalization
 
 ANTES:

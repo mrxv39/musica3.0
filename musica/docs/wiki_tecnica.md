@@ -42,7 +42,25 @@ musica/
 
 ---
 
+
 ## Stable click system v1.0
+
+### Known Issue (Live)
+
+- DEMO: clicks OK
+- REAL: clicks unreliable / often 0% depending on session
+- Confirmed: AHK runs, lock file is created/deleted, issue is injection reliability in live conditions.
+
+### Planned Replacement: Click Engine v2
+
+- **Goals:** Reliable live input in all environments
+- **Constraints:** No ROI, OCR, or detection logic changes
+- **Approach outline:**
+   - Window focus management before input
+   - Input verification after click
+   - Retry strategy for failed clicks
+   - Fallback methods if standard injection fails
+- **Logging/tracing:** All click attempts and results will be logged for live diagnosis
 
 ### clicktablas() — Multi-worker lock
 

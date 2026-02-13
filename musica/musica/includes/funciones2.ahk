@@ -2,6 +2,8 @@
 
 result2(x1, y1, x2, y2, stackvalue, mesa, mano, situacionglobal, situacionfinal, review, ancho, alto, save_img_mesa, posx, posy, p2manos_3h,p3manos_3h, p2vip_3h, p2pfr_3h, p2_3bet_3h, p3vip_3h, p3pfr_3h, p3_3bet_3h, p2_manos_hu_db, p2_vip_hu, p2_pfr_hu, p2_bet_3_hu, p3_manos_hu_db, p3_vip_hu, p3_pfr_hu, p3_bet_3_hu,p2name,p3name)  
 {
+
+    ;MsgBox, AQUIIIIIIIIIIIIIIII123
     
     ;MsgBox, %p2vip_3h% %p2pfr_3h% %p2_3bet_3h%
     ;MOVER IMAGEN A LA CARPETA QUE CORRESPONDE POR SI SITUACION GLOBAL
@@ -738,37 +740,69 @@ poscionclick(elemento, x1t, y1t, anchot, altot)
 clicktablas(xclic, yclic)
 {
     CoordMode, Mouse, Screen
-    SetMouseDelay, -1
-    SetDefaultMouseSpeed, 0
 
     runtimeDir := A_ScriptDir . "\runtime"
     lockFile   := runtimeDir . "\blockclick.txt"
+    traceFile  := runtimeDir . "\click_trace.txt"
+    FileCreateDir, %runtimeDir%
 
-    ; Guardar posición actual
     MouseGetPos, origX, origY
 
-    ; Esperar mientras exista el lock
+    ; --- wait for lock with timeout + stale cleanup ---
+    waitStart := A_TickCount
     while (FileExist(lockFile))
-        Sleep, 100
+    {
+        if (A_TickCount - waitStart > 1500)
+        {
+            FileAppend, %A_TickCount% " STALE_LOCK_REMOVED " lockFile "`n", %traceFile%
+            FileDelete, %lockFile%
+            break
+        }
+        Sleep, 10
+    }
 
-    ; Crear lock
+    ; --- acquire lock ---
     FileAppend,, %lockFile%
+    ; MsgBox opcional para debug (quítalo cuando acabes de probar)
+    ; MsgBox, LOCK CREATED`nFile:`n%lockFile%
 
-    ; --- CLICK PRINCIPAL ---
-    MouseMove, %xclic%, %yclic%, 0
+    ; --- move with verification / retries ---
+    moved := false
+    Loop, 5
+    {
+        DllCall("SetCursorPos", "Int", xclic, "Int", yclic)
+        Sleep, 30
+        MouseGetPos, nx, ny
+        if (Abs(nx - xclic) <= 2 && Abs(ny - yclic) <= 2)
+        {
+            moved := true
+            break
+        }
+        Sleep, 30
+    }
+
+    if (!moved)
+    {
+        FileAppend, %A_TickCount% " MOVE_FAIL target=" xclic "," yclic " got=" nx "," ny "`n", %traceFile%
+        FileDelete, %lockFile%
+        return
+    }
+
+    ; --- click robusto (AHK nativo, evita mouse_event legacy) ---
     Click, %xclic%, %yclic%
-    ; ------------------------
+    Sleep, 50
 
-    ; --- VOLVER A POSICIÓN ORIGINAL ---
-    MouseMove, %origX%, %origY%, 0
-    Click, %origX%, %origY%
-    ; -----------------------------------
+    ; return to original position
+    DllCall("SetCursorPos", "Int", origX, "Int", origY)
 
-    ; Borrar lock
+    FileAppend, %A_TickCount% " CLICK_OK target=" xclic "," yclic "`n", %traceFile%
     FileDelete, %lockFile%
-
-    return
 }
+
+
+
+
+
 
 
 clicktablas2(xclic, yclic)

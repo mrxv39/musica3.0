@@ -789,28 +789,45 @@ def verificar_stack(stack):
 def verificar_stackefectivo(stackefect):
     if stackefect is None:
         return None
+
+    # Si ya viene como número
     if isinstance(stackefect, (int, float)):
-        return float(stackefect)
-    # If not a string, convert safely
-    if not isinstance(stackefect, str):
-        try:
-            stackefect = str(stackefect)
-        except Exception:
+        val = float(stackefect)
+    else:
+        # Convertir a string de forma segura
+        if not isinstance(stackefect, str):
+            try:
+                stackefect = str(stackefect)
+            except Exception:
+                return None
+
+        s = stackefect.replace(",", ".")
+        if s.endswith("."):
+            s = s[:-1]
+        s = s.replace("i", "1")
+        s = s.replace(" —", "")
+        s_limpio = re.sub(r"[^0-9.]", "", s)
+
+        if not s_limpio:
             return None
-    # Now safe to use string methods
-    s = stackefect.replace(",", ".")
-    if s.endswith('.'):
-        s = s[:-1]
-    s = s.replace("i", "1")
-    s = s.replace(" —", "")
-    s_limpio = re.sub(r'[^0-9.]', '', s)
-    try:
-        val = float(s_limpio)
-        print("El valor de stackefect como float es:", val)
-        return val
-    except ValueError:
-        print("Error: No se pudo convertir stackefect a float. Verifica el formato del número.")
-        return s_limpio if s_limpio else s
+
+        try:
+            val = float(s_limpio)
+        except ValueError:
+            return None
+
+    # ✅ Corrección SOLO aquí, sobre el float real
+    if val > 75:
+        for divisor in (10.0, 100.0, 1000.0):
+            candidato = val / divisor
+            if 0 <= candidato <= 75:
+                val = candidato
+                break
+
+        if val > 75:
+            return None
+
+    return val
 
 def verificar_bet(bet):
     if bet == "05":
@@ -1236,6 +1253,8 @@ def ejecutar_busqueda_concurrente():
 
             if carta1_flop == "negro":
                 print(f"NO BOARD ENCONTRADO: ")
+                time.sleep(0.3)
+
 
                 resultado_tercera = future_tercera.result()
                 if resultado_tercera[0]:

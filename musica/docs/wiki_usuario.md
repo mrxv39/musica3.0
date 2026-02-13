@@ -30,6 +30,15 @@ The system is currently fully operational. The following detections and features
 - No click collisions
 - System verified stable
 
+
+## Nota sobre la fiabilidad de los clicks en vivo
+
+Estamos mejorando la fiabilidad de los clicks en partidas reales. Este cambio es interno: no habrá cambios en la interfaz ni en las áreas detectadas (ROIs).
+
+## Troubleshooting
+
+- Si los clicks parecen inconsistentes en partidas reales, es un problema conocido que estamos solucionando.
+
 The next phase will be an internal structural refactor. There will be **no changes to visible behavior** for the user.
 
 ------------------------------------------------------------
